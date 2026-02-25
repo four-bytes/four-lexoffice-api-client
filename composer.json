@@ -1,0 +1,46 @@
+{
+    "name": "four-bytes/four-lexoffice-api-client",
+    "description": "PHP client for the lexoffice/Lexware Office API v1",
+    "type": "library",
+    "version": "0.1.0",
+    "license": "MIT",
+    "keywords": [
+        "lexoffice",
+        "lexware",
+        "accounting",
+        "api-client",
+        "invoicing"
+    ],
+    "authors": [
+        {
+            "name": "Four Bytes",
+            "homepage": "https://github.com/four-bytes"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Four\\LexofficeApiClient\\": "src/Four/LexofficeApiClient/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Four\\LexofficeApiClient\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
