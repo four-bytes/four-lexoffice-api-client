@@ -2,7 +2,7 @@
     "name": "four-bytes/four-lexoffice-api-client",
     "description": "PHP client for the lexoffice/Lexware Office API v1",
     "type": "library",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license": "MIT",
     "keywords": [
         "lexoffice",
