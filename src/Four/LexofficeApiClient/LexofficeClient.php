@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\Exception\RateLimitException;
 
 class LexofficeClient
 {
-    private const BASE_URL = 'https://api.lexoffice.io/v1/';
+    private const BASE_URL = 'https://api.lexware.io/v1/';
     private const USER_AGENT = 'four-lexoffice-api-client/0.1';
     private const MAX_RETRIES = 3;
     private const RATE_LIMIT_WAIT_MS = 1000;
@@ -79,6 +79,79 @@ class LexofficeClient
 
         throw new LexofficeException(
             message: 'Request failed after ' . self::MAX_RETRIES . ' attempts',
+            httpStatusCode: 0,
+            responseBody: '',
+        );
+    }
+
+    /**
+     * Lädt ein PDF von der API herunter und gibt die rohen Bytes zurück.
+     *
+     * @throws LexofficeException
+     * @throws RateLimitException
+     */
+    public function downloadFile(string $endpoint): string
+    {
+        $this->throttle();
+
+        $url = self::BASE_URL . ltrim($endpoint, '/');
+        $attempt = 0;
+
+        while ($attempt < self::MAX_RETRIES) {
+            $attempt++;
+
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL            => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER     => [
+                    'Authorization: Bearer ' . $this->apiKey,
+                    'Accept: application/pdf',
+                    'User-Agent: ' . self::USER_AGENT,
+                ],
+                CURLOPT_TIMEOUT        => 60,
+            ]);
+
+            $responseBody = (string) curl_exec($ch);
+            $statusCode   = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                throw new LexofficeException(
+                    message: 'cURL-Fehler beim PDF-Download: ' . $error,
+                    httpStatusCode: 0,
+                );
+            }
+
+            curl_close($ch);
+
+            self::$lastRequest = microtime(true) * 1000;
+
+            if ($statusCode === 429) {
+                if ($attempt >= self::MAX_RETRIES) {
+                    throw new RateLimitException(
+                        message: 'Rate limit exceeded after ' . self::MAX_RETRIES . ' retries',
+                        responseBody: $responseBody,
+                    );
+                }
+                usleep(self::RATE_LIMIT_WAIT_MS * 1000);
+                continue;
+            }
+
+            if ($statusCode < 200 || $statusCode >= 300) {
+                throw new LexofficeException(
+                    message: sprintf('lexoffice API error %d für PDF-Download: %s', $statusCode, $endpoint),
+                    httpStatusCode: $statusCode,
+                    responseBody: $responseBody,
+                );
+            }
+
+            return $responseBody;
+        }
+
+        throw new LexofficeException(
+            message: 'PDF-Download failed after ' . self::MAX_RETRIES . ' attempts',
             httpStatusCode: 0,
             responseBody: '',
         );

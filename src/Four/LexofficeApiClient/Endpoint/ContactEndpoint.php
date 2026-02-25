@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Four\LexofficeApiClient\Endpoint;
 
 use Four\LexofficeApiClient\DTO\Contact;
+use Four\LexofficeApiClient\DTO\PagedResponse;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
@@ -73,5 +74,52 @@ class ContactEndpoint
         }
 
         return $this->create($contact);
+    }
+
+    /**
+     * Sucht einen Kontakt anhand der E-Mail-Adresse.
+     *
+     * @return array<string, mixed>|null
+     * @throws LexofficeException
+     */
+    public function findByEmail(string $email): ?array
+    {
+        $query  = http_build_query(['email' => $email]);
+        $result = $this->client->sendRequest('contacts?' . $query);
+
+        if (isset($result['content']) && is_array($result['content']) && count($result['content']) > 0) {
+            /** @var array<string, mixed> $first */
+            $first = $result['content'][0];
+            return $first;
+        }
+
+        return null;
+    }
+
+    /**
+     * Sucht Kontakte anhand des Namens (paginiert).
+     *
+     * @throws LexofficeException
+     */
+    public function findByName(string $name): PagedResponse
+    {
+        $query = http_build_query(['name' => $name]);
+        $data  = $this->client->sendRequest('contacts?' . $query);
+        return PagedResponse::fromArray($data);
+    }
+
+    /**
+     * Listet Kontakte paginiert auf.
+     *
+     * @param array<string, string> $filters
+     * @throws LexofficeException
+     */
+    public function list(int $page = 0, array $filters = []): PagedResponse
+    {
+        $params = array_merge(['page' => (string) $page], $filters);
+        $query  = http_build_query($params);
+
+        $data = $this->client->sendRequest('contacts?' . $query);
+        return PagedResponse::fromArray($data);
     }
 }

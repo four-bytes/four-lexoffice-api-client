@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Four\LexofficeApiClient\Tests\DTO;
+
+use Four\LexofficeApiClient\DTO\Article;
+use PHPUnit\Framework\TestCase;
+
+class ArticleTest extends TestCase
+{
+    public function testToApiArrayIncludesRequiredFields(): void
+    {
+        $article = new Article(
+            title:    'Testprodukt',
+            type:     Article::TYPE_PRODUCT,
+            unitName: 'Stück',
+            netPrice: 9.99,
+        );
+
+        $data = $article->toApiArray();
+
+        self::assertSame('Testprodukt', $data['title']);
+        self::assertSame(Article::TYPE_PRODUCT, $data['type']);
+        self::assertSame('Stück', $data['unitName']);
+        self::assertSame(9.99, $data['price']['netPrice']);
+        self::assertSame('NET', $data['price']['leadingPrice']);
+        self::assertSame(19, $data['price']['taxRate']);
+        self::assertSame(0, $data['version']);
+    }
+
+    public function testToApiArrayOmitsNullFields(): void
+    {
+        $article = new Article(
+            title:    'Service',
+            type:     Article::TYPE_SERVICE,
+            unitName: 'Std.',
+            netPrice: 80.00,
+        );
+
+        $data = $article->toApiArray();
+
+        self::assertArrayNotHasKey('description', $data);
+        self::assertArrayNotHasKey('articleNumber', $data);
+        self::assertArrayNotHasKey('gtin', $data);
+        self::assertArrayNotHasKey('note', $data);
+    }
+
+    public function testToApiArrayIncludesOptionalFields(): void
+    {
+        $article = new Article(
+            title:         'Produkt mit Details',
+            type:          Article::TYPE_PRODUCT,
+            unitName:      'kg',
+            netPrice:      4.50,
+            leadingPrice:  'GROSS',
+            taxRate:       7,
+            description:   'Beschreibung',
+            articleNumber: 'ART-001',
+            gtin:          '4012345678901',
+            note:          'Interne Notiz',
+            version:       1,
+        );
+
+        $data = $article->toApiArray();
+
+        self::assertSame('Beschreibung', $data['description']);
+        self::assertSame('ART-001', $data['articleNumber']);
+        self::assertSame('4012345678901', $data['gtin']);
+        self::assertSame('Interne Notiz', $data['note']);
+        self::assertSame(1, $data['version']);
+        self::assertSame('GROSS', $data['price']['leadingPrice']);
+        self::assertSame(7, $data['price']['taxRate']);
+    }
+
+    public function testTypeConstants(): void
+    {
+        self::assertSame('PRODUCT', Article::TYPE_PRODUCT);
+        self::assertSame('SERVICE', Article::TYPE_SERVICE);
+    }
+}
