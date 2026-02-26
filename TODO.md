@@ -36,11 +36,11 @@ xRechnung: { buyerReference, vendorNumberAtCustomer }
 note, archived
 ```
 
-- [ ] `Contact.php` auf verschachtelte Struktur umstellen
-- [ ] Neue DTOs: `ContactPerson.php`, `ContactRole.php`, `ContactAddresses.php`
-- [ ] `fromArray()` für alle Contact-DTOs (für API-Response-Parsing)
-- [ ] Migration: `ContactEndpoint` anpassen, Tests aktualisieren
-- [ ] **Achtung:** Breaking Change — Konsumenten (four-commerce-etsy, webinvo) müssen angepasst werden
+ - [x] `Contact.php` auf verschachtelte Struktur umstellen
+ - [x] Neue DTOs: `ContactPerson.php`, `ContactRole.php`, `ContactAddresses.php`
+ - [x] `fromArray()` für alle Contact-DTOs (für API-Response-Parsing)
+ - [x] Migration: `ContactEndpoint` anpassen, Tests aktualisieren
+ - [x] **Achtung:** Breaking Change — Konsumenten (four-commerce-etsy, webinvo) müssen angepasst werden
 
 ## Verbesserungen (kein Breaking Change)
 
@@ -66,9 +66,9 @@ Die API bietet für viele Ressourcen Deeplinks zur Lexware-App — praktisch fü
 - [x] `VoucherEndpoint::update(string $id, Voucher $voucher): array` — laut API vorhanden
 
 ### Endpoint-Factory im Client
-- [ ] `LexofficeClient::contacts(): ContactEndpoint`
-- [ ] `LexofficeClient::invoices(): InvoiceEndpoint`
-- [ ] etc. — statt manuell `new ContactEndpoint($client)`
+ - [x] `LexofficeClient::contacts(): ContactEndpoint`
+ - [x] `LexofficeClient::invoices(): InvoiceEndpoint`
+ - [x] etc. — statt manuell `new ContactEndpoint($client)`
 
 ## Qualität
 

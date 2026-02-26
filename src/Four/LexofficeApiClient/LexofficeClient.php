@@ -253,4 +253,106 @@ class LexofficeClient
 
         return $decoded;
     }
+
+    // --- Endpoint-Factories ---
+
+    public function contacts(): \Four\LexofficeApiClient\Endpoint\ContactEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\ContactEndpoint($this);
+    }
+
+    public function invoices(): \Four\LexofficeApiClient\Endpoint\InvoiceEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\InvoiceEndpoint($this);
+    }
+
+    public function creditNotes(): \Four\LexofficeApiClient\Endpoint\CreditNoteEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\CreditNoteEndpoint($this);
+    }
+
+    public function deliveryNotes(): \Four\LexofficeApiClient\Endpoint\DeliveryNoteEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\DeliveryNoteEndpoint($this);
+    }
+
+    public function quotations(): \Four\LexofficeApiClient\Endpoint\QuotationEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\QuotationEndpoint($this);
+    }
+
+    public function orderConfirmations(): \Four\LexofficeApiClient\Endpoint\OrderConfirmationEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\OrderConfirmationEndpoint($this);
+    }
+
+    public function dunnings(): \Four\LexofficeApiClient\Endpoint\DunningEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\DunningEndpoint($this);
+    }
+
+    public function downPaymentInvoices(): \Four\LexofficeApiClient\Endpoint\DownPaymentInvoiceEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\DownPaymentInvoiceEndpoint($this);
+    }
+
+    public function articles(): \Four\LexofficeApiClient\Endpoint\ArticleEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\ArticleEndpoint($this);
+    }
+
+    public function vouchers(): \Four\LexofficeApiClient\Endpoint\VoucherEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\VoucherEndpoint($this);
+    }
+
+    public function files(): \Four\LexofficeApiClient\Endpoint\FileEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\FileEndpoint($this);
+    }
+
+    public function payments(): \Four\LexofficeApiClient\Endpoint\PaymentEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\PaymentEndpoint($this);
+    }
+
+    public function eventSubscriptions(): \Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint($this);
+    }
+
+    public function voucherlist(): \Four\LexofficeApiClient\Endpoint\VoucherlistEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\VoucherlistEndpoint($this);
+    }
+
+    public function countries(): \Four\LexofficeApiClient\Endpoint\CountryEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\CountryEndpoint($this);
+    }
+
+    public function profile(): \Four\LexofficeApiClient\Endpoint\ProfileEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\ProfileEndpoint($this);
+    }
+
+    public function paymentConditions(): \Four\LexofficeApiClient\Endpoint\PaymentConditionEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\PaymentConditionEndpoint($this);
+    }
+
+    public function postingCategories(): \Four\LexofficeApiClient\Endpoint\PostingCategoryEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\PostingCategoryEndpoint($this);
+    }
+
+    public function printLayouts(): \Four\LexofficeApiClient\Endpoint\PrintLayoutEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\PrintLayoutEndpoint($this);
+    }
+
+    public function recurringTemplates(): \Four\LexofficeApiClient\Endpoint\RecurringTemplateEndpoint
+    {
+        return new \Four\LexofficeApiClient\Endpoint\RecurringTemplateEndpoint($this);
+    }
 }

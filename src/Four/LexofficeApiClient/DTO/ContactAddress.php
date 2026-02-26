@@ -33,4 +33,16 @@ readonly class ContactAddress
 
         return $data;
     }
+
+    /** @param array<string, mixed> $data */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            street:      $data['street'] ?? '',
+            supplement:  $data['supplement'] ?? '',
+            zip:         $data['zip'] ?? '',
+            city:        $data['city'] ?? '',
+            countryCode: $data['countryCode'] ?? 'DE',
+        );
+    }
 }
