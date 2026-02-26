@@ -4,7 +4,7 @@ PHP-Client für die [lexoffice / Lexware Office API v1](https://developers.lexof
 
 Vollständiger Support für alle 20 Endpoints: Articles, Contacts, Invoices, CreditNotes, DeliveryNotes, Quotations, OrderConfirmations, Payments, EventSubscriptions, Vouchers, Files, Voucherlist + Lookup-Endpoints.
 
-Kein Framework, keine externen Dependencies — nur PHP 8.2+ und cURL.
+Basiert auf `four-bytes/four-http-client` (PSR-18). Rate Limiting und Retry über Middleware — keine direkte cURL-Abhängigkeit.
 
 **API Base URL:** `https://api.lexware.io/v1/`
 
@@ -50,13 +50,27 @@ composer require four-bytes/four-lexoffice-api-client
 
 ```php
 use Four\LexofficeApiClient\LexofficeClient;
+
+// Empfohlen: Static Factory (PSR-18 Client wird automatisch erkannt)
+$client = LexofficeClient::create('dein-api-key');
+
+// Alternativ: Constructor mit DI (z.B. für Tests)
+$client = new LexofficeClient(
+    apiKey: 'dein-api-key',
+    httpClient: $psrClient,
+    requestFactory: $requestFactory,
+    streamFactory: $streamFactory,
+);
+```
+
+### Endpoints registrieren
+
+```php
 use Four\LexofficeApiClient\Endpoint\ContactEndpoint;
 use Four\LexofficeApiClient\Endpoint\InvoiceEndpoint;
 use Four\LexofficeApiClient\Endpoint\VoucherEndpoint;
 use Four\LexofficeApiClient\Endpoint\FileEndpoint;
 use Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint;
-
-$client = new LexofficeClient(apiKey: 'dein-api-key');
 
 // Alle Endpoints
 $contacts    = new ContactEndpoint($client);
@@ -252,7 +266,7 @@ try {
 
 ## Rate Limiting
 
-Der Client wartet automatisch mindestens 1000ms zwischen Requests (lexoffice-Limit: 2 req/s, wir limitieren auf 1 req/s für Sicherheitsabstand). Bei HTTP 429 werden bis zu 3 Retries mit je 1s Wartezeit durchgeführt.
+Rate Limiting (1 req/s) und Retry-Logik (bis zu 3 Versuche bei HTTP 429) werden automatisch über die Middleware-Stack von `four-bytes/four-http-client` gehandhabt. Kein manuelles `sleep()` oder Throttling nötig.
 
 ---
 
