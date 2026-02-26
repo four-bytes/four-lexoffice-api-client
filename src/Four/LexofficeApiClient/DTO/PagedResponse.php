@@ -6,6 +6,9 @@ namespace Four\LexofficeApiClient\DTO;
 
 readonly class PagedResponse
 {
+    /**
+     * @param array<mixed> $content
+     */
     public function __construct(
         public readonly array $content,
         public readonly int $totalElements,
@@ -17,6 +20,9 @@ readonly class PagedResponse
     ) {
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

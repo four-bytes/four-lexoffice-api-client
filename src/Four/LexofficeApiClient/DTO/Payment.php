@@ -10,6 +10,9 @@ readonly class Payment
     public const STATUS_OPEN_REVENUE  = 'openRevenue';
     public const STATUS_OPEN_EXPENSE  = 'openExpense';
 
+    /**
+     * @param array<mixed> $paymentItems
+     */
     public function __construct(
         public readonly float $openAmount,
         public readonly string $paymentStatus,
@@ -19,6 +22,9 @@ readonly class Payment
     ) {
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

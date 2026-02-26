@@ -31,3 +31,12 @@
 - Endpoint: CountryEndpoint, ProfileEndpoint, PaymentConditionEndpoint, PostingCategoryEndpoint, PrintLayoutEndpoint, RecurringTemplateEndpoint (alle read-only)
 - ContactEndpoint: findByEmail(), findByName(), list() mit PagedResponse ergänzt
 - Tests: 42 Tests, 166 Assertions (alle grün)
+
+## 0.3.0 — 2026-02-26
+- Replaced raw cURL transport with PSR-18 HTTP client interface
+- Added `LexofficeClient::create(string $apiKey)` static factory using four-http-client
+- Rate limiting (1 req/s) now handled by four-rate-limiting middleware
+- Retry logic (3x on 429) now handled by four-http-client RetryMiddleware
+- Removed `ext-curl` dependency
+- Added `four-bytes/four-http-client ^4.0` and `four-bytes/four-rate-limiting ^1.3`
+- Added PHPUnit 11 tests for LexofficeClient transport layer
