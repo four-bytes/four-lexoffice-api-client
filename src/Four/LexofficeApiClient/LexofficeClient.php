@@ -4,22 +4,62 @@ declare(strict_types=1);
 
 namespace Four\LexofficeApiClient;
 
+use Four\Http\Configuration\ClientConfig;
+use Four\Http\Configuration\RetryConfig;
+use Four\Http\Factory\HttpClientFactory;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\Exception\RateLimitException;
+use Four\RateLimit\RateLimitConfiguration;
+use Four\RateLimit\RateLimiterFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class LexofficeClient
 {
     private const BASE_URL = 'https://api.lexware.io/v1/';
-    private const USER_AGENT = 'four-lexoffice-api-client/0.1';
-    private const MAX_RETRIES = 3;
-    private const RATE_LIMIT_WAIT_MS = 1000;
-    private const MIN_REQUEST_INTERVAL_MS = 1000;
-
-    private static ?float $lastRequest = null;
+    private const USER_AGENT = 'four-lexoffice-api-client/0.3';
 
     public function __construct(
         private readonly string $apiKey,
-    ) {
+        private readonly ClientInterface $httpClient,
+        private readonly RequestFactoryInterface $requestFactory,
+        private readonly StreamFactoryInterface $streamFactory,
+    ) {}
+
+    public static function create(string $apiKey): self
+    {
+        $rateLimiterConfig = new RateLimitConfiguration(
+            algorithm: RateLimitConfiguration::ALGORITHM_FIXED_WINDOW,
+            ratePerSecond: 1.0,
+            burstCapacity: 1,
+        );
+        $rateLimiter = (new RateLimiterFactory())->create($rateLimiterConfig);
+
+        $retryConfig = new RetryConfig(
+            maxAttempts: 3,
+            retryableStatusCodes: [429],
+        );
+
+        $config = new ClientConfig(
+            baseUri: self::BASE_URL,
+            defaultHeaders: [
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Accept'        => 'application/json',
+                'User-Agent'    => self::USER_AGENT,
+            ],
+            middleware: ['retry', 'rate_limiting'],
+            rateLimiter: $rateLimiter,
+            retryConfig: $retryConfig,
+            timeout: 30.0,
+        );
+
+        $psrClient = (new HttpClientFactory())->create($config);
+        $psr17 = new Psr17Factory();
+
+        return new self($apiKey, $psrClient, $psr17, $psr17);
     }
 
     /**
@@ -31,57 +71,61 @@ class LexofficeClient
      */
     public function sendRequest(string $endpoint, mixed $body = null, string $method = 'GET'): array
     {
-        $this->throttle();
-
         $url = self::BASE_URL . ltrim($endpoint, '/');
-        $attempt = 0;
 
-        while ($attempt < self::MAX_RETRIES) {
-            $attempt++;
-            [$statusCode, $responseBody] = $this->executeCurl($url, $method, $body);
+        $request = $this->requestFactory->createRequest($method, $url)
+            ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('User-Agent', self::USER_AGENT);
 
-            self::$lastRequest = microtime(true) * 1000;
-
-            if ($statusCode === 429) {
-                if ($attempt >= self::MAX_RETRIES) {
-                    throw new RateLimitException(
-                        message: 'Rate limit exceeded after ' . self::MAX_RETRIES . ' retries',
-                        responseBody: $responseBody,
-                    );
-                }
-                usleep(self::RATE_LIMIT_WAIT_MS * 1000);
-                continue;
-            }
-
-            if ($statusCode < 200 || $statusCode >= 300) {
-                throw new LexofficeException(
-                    message: sprintf('lexoffice API error %d for %s %s', $statusCode, $method, $endpoint),
-                    httpStatusCode: $statusCode,
-                    responseBody: $responseBody,
-                );
-            }
-
-            if (empty($responseBody)) {
-                return [];
-            }
-
-            $decoded = json_decode($responseBody, true);
-            if (!is_array($decoded)) {
-                throw new LexofficeException(
-                    message: 'Invalid JSON response from lexoffice API',
-                    httpStatusCode: $statusCode,
-                    responseBody: $responseBody,
-                );
-            }
-
-            return $decoded;
+        if ($body !== null && in_array($method, ['POST', 'PUT', 'PATCH'], true)) {
+            $json = json_encode($body, JSON_THROW_ON_ERROR);
+            $request = $request
+                ->withHeader('Content-Type', 'application/json')
+                ->withBody($this->streamFactory->createStream($json));
         }
 
-        throw new LexofficeException(
-            message: 'Request failed after ' . self::MAX_RETRIES . ' attempts',
-            httpStatusCode: 0,
-            responseBody: '',
-        );
+        try {
+            $response = $this->httpClient->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new LexofficeException(
+                message: 'HTTP request failed: ' . $e->getMessage(),
+                httpStatusCode: 0,
+            );
+        }
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode === 429) {
+            throw new RateLimitException(
+                message: 'Rate limit exceeded',
+                responseBody: (string) $response->getBody(),
+            );
+        }
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new LexofficeException(
+                message: sprintf('lexoffice API error %d for %s %s', $statusCode, $method, $endpoint),
+                httpStatusCode: $statusCode,
+                responseBody: (string) $response->getBody(),
+            );
+        }
+
+        $responseBody = (string) $response->getBody();
+        if (empty($responseBody)) {
+            return [];
+        }
+
+        $decoded = json_decode($responseBody, true);
+        if (!is_array($decoded)) {
+            throw new LexofficeException(
+                message: 'Invalid JSON response from lexoffice API',
+                httpStatusCode: $statusCode,
+                responseBody: $responseBody,
+            );
+        }
+
+        return $decoded;
     }
 
     /**
@@ -92,69 +136,37 @@ class LexofficeClient
      */
     public function downloadFile(string $endpoint): string
     {
-        $this->throttle();
-
         $url = self::BASE_URL . ltrim($endpoint, '/');
-        $attempt = 0;
 
-        while ($attempt < self::MAX_RETRIES) {
-            $attempt++;
+        $request = $this->requestFactory->createRequest('GET', $url)
+            ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
+            ->withHeader('Accept', 'application/pdf')
+            ->withHeader('User-Agent', self::USER_AGENT);
 
-            $ch = curl_init();
-            curl_setopt_array($ch, [
-                CURLOPT_URL            => $url,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HTTPHEADER     => [
-                    'Authorization: Bearer ' . $this->apiKey,
-                    'Accept: application/pdf',
-                    'User-Agent: ' . self::USER_AGENT,
-                ],
-                CURLOPT_TIMEOUT        => 60,
-            ]);
-
-            $responseBody = (string) curl_exec($ch);
-            $statusCode   = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if (curl_errno($ch)) {
-                $error = curl_error($ch);
-                curl_close($ch);
-                throw new LexofficeException(
-                    message: 'cURL-Fehler beim PDF-Download: ' . $error,
-                    httpStatusCode: 0,
-                );
-            }
-
-            curl_close($ch);
-
-            self::$lastRequest = microtime(true) * 1000;
-
-            if ($statusCode === 429) {
-                if ($attempt >= self::MAX_RETRIES) {
-                    throw new RateLimitException(
-                        message: 'Rate limit exceeded after ' . self::MAX_RETRIES . ' retries',
-                        responseBody: $responseBody,
-                    );
-                }
-                usleep(self::RATE_LIMIT_WAIT_MS * 1000);
-                continue;
-            }
-
-            if ($statusCode < 200 || $statusCode >= 300) {
-                throw new LexofficeException(
-                    message: sprintf('lexoffice API error %d für PDF-Download: %s', $statusCode, $endpoint),
-                    httpStatusCode: $statusCode,
-                    responseBody: $responseBody,
-                );
-            }
-
-            return $responseBody;
+        try {
+            $response = $this->httpClient->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
+            throw new LexofficeException(
+                message: 'PDF download failed: ' . $e->getMessage(),
+                httpStatusCode: 0,
+            );
         }
 
-        throw new LexofficeException(
-            message: 'PDF-Download failed after ' . self::MAX_RETRIES . ' attempts',
-            httpStatusCode: 0,
-            responseBody: '',
-        );
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode === 429) {
+            throw new RateLimitException(responseBody: (string) $response->getBody());
+        }
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new LexofficeException(
+                message: sprintf('lexoffice API error %d for PDF download: %s', $statusCode, $endpoint),
+                httpStatusCode: $statusCode,
+                responseBody: (string) $response->getBody(),
+            );
+        }
+
+        return (string) $response->getBody();
     }
 
     /**
@@ -168,175 +180,77 @@ class LexofficeClient
     {
         if (!file_exists($filePath)) {
             throw new LexofficeException(
-                message: sprintf('Datei nicht gefunden: %s', $filePath),
+                message: sprintf('File not found: %s', $filePath),
                 httpStatusCode: 0,
             );
         }
 
-        $this->throttle();
+        $fileContent = file_get_contents($filePath);
+        if ($fileContent === false) {
+            throw new LexofficeException(
+                message: sprintf('Failed to read file: %s', $filePath),
+                httpStatusCode: 0,
+            );
+        }
+
+        $boundary = '----LexofficeBoundary' . bin2hex(random_bytes(8));
+        $body = "--{$boundary}\r\n"
+            . "Content-Disposition: form-data; name=\"file\"; filename=\"" . basename($filePath) . "\"\r\n"
+            . "Content-Type: application/pdf\r\n"
+            . "\r\n"
+            . $fileContent . "\r\n"
+            . "--{$boundary}\r\n"
+            . "Content-Disposition: form-data; name=\"type\"\r\n"
+            . "\r\n"
+            . $type . "\r\n"
+            . "--{$boundary}--\r\n";
 
         $url = self::BASE_URL . ltrim($endpoint, '/');
-        $attempt = 0;
 
-        while ($attempt < self::MAX_RETRIES) {
-            $attempt++;
+        $request = $this->requestFactory->createRequest('POST', $url)
+            ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
+            ->withHeader('Accept', 'application/json')
+            ->withHeader('User-Agent', self::USER_AGENT)
+            ->withHeader('Content-Type', 'multipart/form-data; boundary=' . $boundary)
+            ->withBody($this->streamFactory->createStream($body));
 
-            $postFields = [
-                'file' => new \CURLFile($filePath, 'application/pdf', basename($filePath)),
-                'type' => $type,
-            ];
-
-            [$statusCode, $responseBody] = $this->executeCurlMultipart($url, $postFields);
-
-            self::$lastRequest = microtime(true) * 1000;
-
-            if ($statusCode === 429) {
-                if ($attempt >= self::MAX_RETRIES) {
-                    throw new RateLimitException(
-                        message: 'Rate limit exceeded after ' . self::MAX_RETRIES . ' retries',
-                        responseBody: $responseBody,
-                    );
-                }
-                usleep(self::RATE_LIMIT_WAIT_MS * 1000);
-                continue;
-            }
-
-            if ($statusCode < 200 || $statusCode >= 300) {
-                throw new LexofficeException(
-                    message: sprintf('lexoffice API error %d beim Datei-Upload: %s', $statusCode, $endpoint),
-                    httpStatusCode: $statusCode,
-                    responseBody: $responseBody,
-                );
-            }
-
-            if (empty($responseBody)) {
-                return [];
-            }
-
-            $decoded = json_decode($responseBody, true);
-            if (!is_array($decoded)) {
-                throw new LexofficeException(
-                    message: 'Invalid JSON response from lexoffice API',
-                    httpStatusCode: $statusCode,
-                    responseBody: $responseBody,
-                );
-            }
-
-            return $decoded;
-        }
-
-        throw new LexofficeException(
-            message: 'Upload failed after ' . self::MAX_RETRIES . ' attempts',
-            httpStatusCode: 0,
-            responseBody: '',
-        );
-    }
-
-    /**
-     * Rate-Limiting: min. 1000ms zwischen Requests einhalten.
-     */
-    private function throttle(): void
-    {
-        if (self::$lastRequest === null) {
-            return;
-        }
-
-        $elapsed = (microtime(true) * 1000) - self::$lastRequest;
-        if ($elapsed < self::MIN_REQUEST_INTERVAL_MS) {
-            $waitUs = (int) ((self::MIN_REQUEST_INTERVAL_MS - $elapsed) * 1000);
-            usleep($waitUs);
-        }
-    }
-
-    /**
-     * Führt einen cURL-Request aus und gibt [statusCode, body] zurück.
-     *
-     * @param array<mixed>|null $body
-     * @return array{int, string}
-     */
-    private function executeCurl(string $url, string $method, mixed $body): array
-    {
-        $ch = curl_init();
-
-        $headers = [
-            'Authorization: Bearer ' . $this->apiKey,
-            'Accept: application/json',
-            'User-Agent: ' . self::USER_AGENT,
-        ];
-
-        $options = [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_TIMEOUT        => 30,
-        ];
-
-        if ($method === 'POST' || $method === 'PUT' || $method === 'PATCH') {
-            $jsonBody = $body !== null ? json_encode($body) : '{}';
-            $options[CURLOPT_POSTFIELDS] = $jsonBody;
-            $options[CURLOPT_CUSTOMREQUEST] = $method;
-            $headers[] = 'Content-Type: application/json';
-            $options[CURLOPT_HTTPHEADER] = $headers;
-        } elseif ($method !== 'GET') {
-            $options[CURLOPT_CUSTOMREQUEST] = $method;
-        }
-
-        curl_setopt_array($ch, $options);
-
-        $responseBody = (string) curl_exec($ch);
-        $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if (curl_errno($ch)) {
-            $error = curl_error($ch);
-            curl_close($ch);
+        try {
+            $response = $this->httpClient->sendRequest($request);
+        } catch (ClientExceptionInterface $e) {
             throw new LexofficeException(
-                message: 'cURL-Fehler: ' . $error,
+                message: 'File upload failed: ' . $e->getMessage(),
                 httpStatusCode: 0,
             );
         }
 
-        curl_close($ch);
+        $statusCode = $response->getStatusCode();
 
-        return [$statusCode, $responseBody];
-    }
+        if ($statusCode === 429) {
+            throw new RateLimitException(responseBody: (string) $response->getBody());
+        }
 
-    /**
-     * Führt einen multipart/form-data Upload per cURL aus.
-     *
-     * @param array<string, mixed> $postFields
-     * @return array{int, string}
-     */
-    private function executeCurlMultipart(string $url, array $postFields): array
-    {
-        $ch = curl_init();
-
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => $postFields,
-            CURLOPT_HTTPHEADER     => [
-                'Authorization: Bearer ' . $this->apiKey,
-                'Accept: application/json',
-                'User-Agent: ' . self::USER_AGENT,
-            ],
-            CURLOPT_TIMEOUT        => 60,
-        ]);
-
-        $responseBody = (string) curl_exec($ch);
-        $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if (curl_errno($ch)) {
-            $error = curl_error($ch);
-            curl_close($ch);
+        if ($statusCode < 200 || $statusCode >= 300) {
             throw new LexofficeException(
-                message: 'cURL-Fehler beim Upload: ' . $error,
-                httpStatusCode: 0,
+                message: sprintf('lexoffice API error %d for file upload: %s', $statusCode, $endpoint),
+                httpStatusCode: $statusCode,
+                responseBody: (string) $response->getBody(),
             );
         }
 
-        curl_close($ch);
+        $responseBody = (string) $response->getBody();
+        if (empty($responseBody)) {
+            return [];
+        }
 
-        return [$statusCode, $responseBody];
+        $decoded = json_decode($responseBody, true);
+        if (!is_array($decoded)) {
+            throw new LexofficeException(
+                message: 'Invalid JSON response from lexoffice API',
+                httpStatusCode: $statusCode,
+                responseBody: $responseBody,
+            );
+        }
+
+        return $decoded;
     }
 }
