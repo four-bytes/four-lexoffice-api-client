@@ -39,6 +39,24 @@ class PaymentTest extends TestCase
         self::assertSame('', $payment->voucherType);
         self::assertSame('', $payment->voucherStatus);
         self::assertSame([], $payment->paymentItems);
+        self::assertNull($payment->paidDate);
+    }
+
+    public function testPaidDate(): void
+    {
+        $paidDate = '2024-01-15T00:00:00+01:00';
+        $data = [
+            'openAmount'    => 29.99,
+            'paymentStatus' => 'balanced',
+            'voucherType'   => 'invoice',
+            'voucherStatus' => 'paid',
+            'paymentItems'  => [],
+            'paidDate'      => $paidDate,
+        ];
+
+        $payment = Payment::fromArray($data);
+
+        self::assertSame($paidDate, $payment->paidDate);
     }
 
     public function testStatusConstants(): void

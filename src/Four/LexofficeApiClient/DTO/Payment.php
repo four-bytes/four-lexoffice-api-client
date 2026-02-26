@@ -19,6 +19,7 @@ readonly class Payment
         public readonly string $voucherType,
         public readonly string $voucherStatus,
         public readonly array $paymentItems,
+        public readonly ?string $paidDate = null,
     ) {
     }
 
@@ -33,6 +34,7 @@ readonly class Payment
             voucherType:   (string) ($data['voucherType'] ?? ''),
             voucherStatus: (string) ($data['voucherStatus'] ?? ''),
             paymentItems:  $data['paymentItems'] ?? [],
+            paidDate:      $data['paidDate'] ?? null,
         );
     }
 }
