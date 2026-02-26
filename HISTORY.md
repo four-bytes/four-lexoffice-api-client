@@ -32,6 +32,14 @@
 - ContactEndpoint: findByEmail(), findByName(), list() mit PagedResponse ergänzt
 - Tests: 42 Tests, 166 Assertions (alle grün)
 
+## 0.5.0 — 2026-02-26
+- **Breaking Change:** Contact DTO auf verschachtelte API-Struktur migriert
+- Neue DTOs: ContactCompany, ContactPerson
+- ContactAddress: fromArray() ergänzt
+- Contact: isCustomer/isVendor statt isCompany/isVendor, company/person-Objekte, billingAddresses[], emailsBusiness/Office/Private/Other[], phonesBusiness/Office/Mobile/Private/Fax/Other[], xRechnungBuyerReference, xRechnungVendorNumber, fromArray()
+- LexofficeClient: 20 Endpoint-Factory-Methoden (contacts(), invoices(), articles(), etc.)
+- Tests: 61 Tests, 207 Assertions (alle grün)
+
 ## 0.4.0 — 2026-02-26
 - Endpoint: DunningEndpoint (Mahnwesen) — create, pursue, get, downloadPdf
 - Endpoint: DownPaymentInvoiceEndpoint (Abschlagsrechnungen) — get, downloadPdf (read-only)
