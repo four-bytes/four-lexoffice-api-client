@@ -32,6 +32,13 @@
 - ContactEndpoint: findByEmail(), findByName(), list() mit PagedResponse ergänzt
 - Tests: 42 Tests, 166 Assertions (alle grün)
 
+## 0.4.0 — 2026-02-26
+- Endpoint: DunningEndpoint (Mahnwesen) — create, pursue, get, downloadPdf
+- Endpoint: DownPaymentInvoiceEndpoint (Abschlagsrechnungen) — get, downloadPdf (read-only)
+- VoucherEndpoint: update() ergänzt
+- DTO: fromArray() für alle DTOs — Invoice, CreditNote, Quotation, DeliveryNote, Dunning, Article, Voucher, VoucherItem, EventSubscription, InvoiceLineItem
+- Tests: 59 Tests, 191 Assertions (alle grün)
+
 ## 0.3.0 — 2026-02-26
 - Replaced raw cURL transport with PSR-18 HTTP client interface
 - Added `LexofficeClient::create(string $apiKey)` static factory using four-http-client

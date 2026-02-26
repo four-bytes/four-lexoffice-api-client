@@ -47,4 +47,17 @@ class VoucherEndpoint
 
         return $response['id'];
     }
+
+    /**
+     * Aktualisiert einen bestehenden Voucher.
+     *
+     * @return array<string, mixed>
+     * @throws LexofficeException
+     */
+    public function update(string $voucherId, Voucher $voucher): array
+    {
+        /** @var array<string, mixed> $result */
+        $result = $this->client->sendRequest('vouchers/' . $voucherId, $voucher->toApiArray(), 'PUT');
+        return $result;
+    }
 }

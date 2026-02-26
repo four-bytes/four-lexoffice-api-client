@@ -65,4 +65,32 @@ readonly class DeliveryNote
 
         return $data;
     }
+
+    /**
+     * Erstellt eine DeliveryNote-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        $address = $data['address'] ?? [];
+        $lineItems = array_map(
+            static fn(array $item) => InvoiceLineItem::fromArray($item),
+            $data['lineItems'] ?? [],
+        );
+
+        return new static(
+            voucherDate:             $data['voucherDate'] ?? '',
+            addressName:             $address['name'] ?? '',
+            addressStreet:           $address['street'] ?? '',
+            addressCity:             $address['city'] ?? '',
+            addressZip:              $address['zip'] ?? '',
+            addressCountryCode:      $address['countryCode'] ?? '',
+            lineItems:               $lineItems,
+            contactId:               $address['contactId'] ?? null,
+            introduction:            $data['introduction'] ?? null,
+            remark:                  $data['remark'] ?? null,
+            shippingConditionsDate:  $data['shippingConditions']['shippingDate'] ?? null,
+        );
+    }
 }
