@@ -59,4 +59,28 @@ readonly class Article
 
         return $data;
     }
+
+    /**
+     * Erstellt eine Article-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        $price = $data['price'] ?? [];
+
+        return new static(
+            title:       $data['title'] ?? '',
+            type:        $data['type'] ?? self::TYPE_PRODUCT,
+            unitName:    $data['unitName'] ?? '',
+            netPrice:    (float) ($price['netPrice'] ?? 0),
+            leadingPrice: $price['leadingPrice'] ?? 'NET',
+            taxRate:     (int) ($price['taxRate'] ?? 19),
+            description: $data['description'] ?? null,
+            articleNumber: $data['articleNumber'] ?? null,
+            gtin:        $data['gtin'] ?? null,
+            note:        $data['note'] ?? null,
+            version:     (int) ($data['version'] ?? 0),
+        );
+    }
 }

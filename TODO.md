@@ -3,19 +3,19 @@
 ## Fehlende Endpoints (API vorhanden, nicht implementiert)
 
 ### DunningEndpoint (Mahnwesen)
-- [ ] `src/Four/LexofficeApiClient/Endpoint/DunningEndpoint.php`
+- [x] `src/Four/LexofficeApiClient/Endpoint/DunningEndpoint.php`
   - `create(string $precedingSalesVoucherId): array` — pursue from invoice
   - `pursue(string $precedingId): array`
   - `get(string $id): array`
   - `downloadPdf(string $id): string`
-- [ ] `src/Four/LexofficeApiClient/DTO/Dunning.php` — identisch zu Invoice-Struktur
-- [ ] Tests: `tests/Endpoint/DunningEndpointTest.php`
+- [x] `src/Four/LexofficeApiClient/DTO/Dunning.php` — identisch zu Invoice-Struktur
+- [x] Tests: `tests/Endpoint/DunningEndpointTest.php`
 
 ### DownPaymentInvoicesEndpoint (Abschlagsrechnungen)
-- [ ] `src/Four/LexofficeApiClient/Endpoint/DownPaymentInvoiceEndpoint.php`
+- [x] `src/Four/LexofficeApiClient/Endpoint/DownPaymentInvoiceEndpoint.php`
   - `get(string $id): array` — read-only
   - `downloadPdf(string $id): string`
-- [ ] Tests: `tests/Endpoint/DownPaymentInvoiceEndpointTest.php`
+- [x] Tests: `tests/Endpoint/DownPaymentInvoiceEndpointTest.php`
 
 ## Contact DTO — Strukturelle Verbesserung (Breaking Change)
 
@@ -46,14 +46,14 @@ note, archived
 
 ### fromArray() für alle DTOs
 Fast alle DTOs haben nur `toApiArray()` aber kein `fromArray()` — API-Responses können damit nicht geparst werden.
-- [ ] `Invoice::fromArray()`
-- [ ] `CreditNote::fromArray()`
-- [ ] `Quotation::fromArray()`
-- [ ] `OrderConfirmation::fromArray()`
-- [ ] `DeliveryNote::fromArray()`
-- [ ] `Article::fromArray()`
-- [ ] `EventSubscription::fromArray()`
-- [ ] `Voucher::fromArray()`
+- [x] `Invoice::fromArray()`
+- [x] `CreditNote::fromArray()`
+- [x] `Quotation::fromArray()`
+- [x] `OrderConfirmation::fromArray()`
+- [x] `DeliveryNote::fromArray()`
+- [x] `Article::fromArray()`
+- [x] `EventSubscription::fromArray()`
+- [x] `Voucher::fromArray()`
 
 ### Deeplinks
 Die API bietet für viele Ressourcen Deeplinks zur Lexware-App — praktisch für UI-Integration.
@@ -63,7 +63,7 @@ Die API bietet für viele Ressourcen Deeplinks zur Lexware-App — praktisch fü
   - etc.
 
 ### VoucherEndpoint: update()
-- [ ] `VoucherEndpoint::update(string $id, Voucher $voucher): array` — laut API vorhanden
+- [x] `VoucherEndpoint::update(string $id, Voucher $voucher): array` — laut API vorhanden
 
 ### Endpoint-Factory im Client
 - [ ] `LexofficeClient::contacts(): ContactEndpoint`

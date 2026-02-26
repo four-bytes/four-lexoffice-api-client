@@ -49,4 +49,18 @@ readonly class EventSubscription
             'active'      => $this->active,
         ];
     }
+
+    /**
+     * Erstellt eine EventSubscription-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            callbackUrl: $data['callbackUrl'] ?? '',
+            eventTypes: array_values($data['eventTypes'] ?? []),
+            active:     $data['active'] ?? true,
+        );
+    }
 }

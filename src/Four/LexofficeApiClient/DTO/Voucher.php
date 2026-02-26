@@ -53,4 +53,33 @@ readonly class Voucher
 
         return $data;
     }
+
+    /**
+     * Erstellt eine Voucher-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        $voucherItems = [];
+        if (isset($data['voucherItems']) && is_array($data['voucherItems'])) {
+            $voucherItems = array_map(
+                static fn(array $item) => VoucherItem::fromArray($item),
+                $data['voucherItems'],
+            );
+        }
+
+        return new static(
+            type:             $data['type'] ?? '',
+            voucherNumber:    $data['voucherNumber'] ?? '',
+            voucherDate:      $data['voucherDate'] ?? '',
+            totalGrossAmount: (float) ($data['totalGrossAmount'] ?? 0),
+            totalTaxAmount:   (float) ($data['totalTaxAmount'] ?? 0),
+            contactId:        $data['contactId'] ?? '',
+            remark:           $data['remark'] ?? '',
+            shippingDate:     $data['shippingDate'] ?? null,
+            taxType:          $data['taxType'] ?? 'gross',
+            voucherItems:     $voucherItems,
+        );
+    }
 }

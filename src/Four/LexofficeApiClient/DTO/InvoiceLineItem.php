@@ -51,4 +51,26 @@ readonly class InvoiceLineItem
 
         return $data;
     }
+
+    /**
+     * Erstellt eine InvoiceLineItem-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        $unitPrice = $data['unitPrice'] ?? [];
+
+        return new static(
+            name:                 $data['name'] ?? '',
+            quantity:             (float) ($data['quantity'] ?? 1),
+            unitName:             $data['unitName'] ?? '',
+            unitNetPrice:         (float) ($unitPrice['netAmount'] ?? 0),
+            taxRatePercentage:    (float) ($unitPrice['taxRatePercentage'] ?? 0),
+            type:                 $data['type'] ?? self::TYPE_CUSTOM,
+            description:          $data['description'] ?? null,
+            discountPercentage:  isset($data['discountPercentage']) ? (float) $data['discountPercentage'] : null,
+            currency:             $unitPrice['currency'] ?? 'EUR',
+        );
+    }
 }

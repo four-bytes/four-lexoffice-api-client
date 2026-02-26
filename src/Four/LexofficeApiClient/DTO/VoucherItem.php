@@ -44,4 +44,19 @@ readonly class VoucherItem
             'categoryId'     => $this->categoryId,
         ];
     }
+
+    /**
+     * Erstellt eine VoucherItem-Instanz aus einer API-Response.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): static
+    {
+        return new static(
+            amount:         (float) ($data['amount'] ?? 0),
+            taxAmount:      (float) ($data['taxAmount'] ?? 0),
+            taxRatePercent: (int) ($data['taxRatePercent'] ?? 0),
+            categoryId:     $data['categoryId'] ?? self::CATEGORY_INLAND_SALES,
+        );
+    }
 }
