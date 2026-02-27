@@ -27,7 +27,7 @@ readonly class VoucherItem
     public function __construct(
         public float $amount,
         public float $taxAmount,
-        public int $taxRatePercent,
+        public float $taxRatePercent,
         public string $categoryId = self::CATEGORY_INLAND_SALES,
     ) {
     }
@@ -40,7 +40,9 @@ readonly class VoucherItem
         return [
             'amount'         => number_format($this->amount, 2, '.', ''),
             'taxAmount'      => number_format($this->taxAmount, 2, '.', ''),
-            'taxRatePercent' => $this->taxRatePercent,
+            'taxRatePercent' => $this->taxRatePercent == (int)$this->taxRatePercent
+                ? (int)$this->taxRatePercent
+                : $this->taxRatePercent,
             'categoryId'     => $this->categoryId,
         ];
     }
@@ -55,7 +57,7 @@ readonly class VoucherItem
         return new static(
             amount:         (float) ($data['amount'] ?? 0),
             taxAmount:      (float) ($data['taxAmount'] ?? 0),
-            taxRatePercent: (int) ($data['taxRatePercent'] ?? 0),
+            taxRatePercent: (float) ($data['taxRatePercent'] ?? 0),
             categoryId:     $data['categoryId'] ?? self::CATEGORY_INLAND_SALES,
         );
     }

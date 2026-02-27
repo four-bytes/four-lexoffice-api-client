@@ -62,4 +62,20 @@ class VoucherItemTest extends TestCase
         self::assertSame('0.00', $data['taxAmount']);
         self::assertSame(0, $data['taxRatePercent']);
     }
+
+    public function testFractionalTaxRate(): void
+    {
+        $item = new VoucherItem(
+            amount: 40.89,
+            taxAmount: 8.31,
+            taxRatePercent: 25.5,
+            categoryId: VoucherItem::CATEGORY_EU_SALES,
+        );
+
+        $data = $item->toApiArray();
+
+        self::assertSame('40.89', $data['amount']);
+        self::assertSame('8.31', $data['taxAmount']);
+        self::assertSame(25.5, $data['taxRatePercent']);
+    }
 }
