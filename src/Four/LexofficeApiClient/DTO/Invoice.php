@@ -23,6 +23,7 @@ readonly class Invoice
         public readonly ?string $remark = null,
         public readonly ?string $paymentConditionId = null,
         public readonly ?string $shippingConditionsDate = null,
+        public readonly ?array $totalPrice = null,
     ) {
     }
 
@@ -76,6 +77,10 @@ readonly class Invoice
             ];
         }
 
+        if ($this->totalPrice !== null) {
+            $data['totalPrice'] = $this->totalPrice;
+        }
+
         return $data;
     }
 
@@ -106,6 +111,7 @@ readonly class Invoice
             remark:             $data['remark'] ?? null,
             paymentConditionId: $data['paymentConditions']['id'] ?? null,
             shippingConditionsDate: $data['shippingConditions']['shippingDate'] ?? null,
+            totalPrice: $data['totalPrice'] ?? null,
         );
     }
 }
