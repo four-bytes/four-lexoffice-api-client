@@ -37,6 +37,7 @@ readonly class InvoiceLineItem
             'unitPrice' => [
                 'currency'          => $this->currency,
                 'netAmount'         => $this->unitNetPrice,
+                'grossAmount'      => round($this->unitNetPrice * (1 + $this->taxRatePercentage / 100.0), 2),
                 'taxRatePercentage' => $this->taxRatePercentage,
             ],
         ];
