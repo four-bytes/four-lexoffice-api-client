@@ -26,6 +26,7 @@ readonly class Invoice
         public readonly ?array $totalPrice = null,
         public readonly ?string $title = null,
         public readonly ?array $xRechnung = null,
+        public readonly ?string $printLayoutId = null,
     ) {
     }
 
@@ -89,6 +90,9 @@ readonly class Invoice
         if ($this->xRechnung !== null) {
             $data['xRechnung'] = $this->xRechnung;
         }
+        if ($this->printLayoutId !== null) {
+            $data['printLayoutId'] = $this->printLayoutId;
+        }
 
         return $data;
     }
@@ -123,6 +127,7 @@ readonly class Invoice
             totalPrice: $data['totalPrice'] ?? null,
             title: $data['title'] ?? null,
             xRechnung: $data['xRechnung'] ?? null,
+            printLayoutId: $data['printLayoutId'] ?? null,
         );
     }
 }
