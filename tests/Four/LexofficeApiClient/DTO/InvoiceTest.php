@@ -10,8 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class InvoiceTest extends TestCase
 {
-    private function buildInvoice(?string $contactId = null, ?string $remark = null): Invoice
-    {
+    private function buildInvoice(
+        ?string $contactId = null,
+        ?string $remark = null,
+        ?string $addressSupplement = null,
+    ): Invoice {
         return new Invoice(
             voucherDate:        '2026-02-25',
             addressName:        'Max Mustermann',
@@ -31,6 +34,7 @@ class InvoiceTest extends TestCase
             taxType:   'gross',
             contactId: $contactId,
             remark:    $remark,
+            addressSupplement: $addressSupplement,
         );
     }
 
@@ -79,5 +83,21 @@ class InvoiceTest extends TestCase
         $data    = $invoice->toApiArray();
 
         self::assertArrayNotHasKey('remark', $data);
+    }
+
+    public function testToApiArrayIncludesAddressSupplement(): void
+    {
+        $invoice = $this->buildInvoice(addressSupplement: 'c/o Four Bytes GmbH');
+        $data    = $invoice->toApiArray();
+
+        self::assertSame('c/o Four Bytes GmbH', $data['address']['supplement']);
+    }
+
+    public function testToApiArrayOmitsNullAddressSupplement(): void
+    {
+        $invoice = $this->buildInvoice(addressSupplement: null);
+        $data    = $invoice->toApiArray();
+
+        self::assertArrayNotHasKey('supplement', $data['address']);
     }
 }

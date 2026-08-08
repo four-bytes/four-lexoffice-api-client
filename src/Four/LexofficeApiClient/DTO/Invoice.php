@@ -27,6 +27,7 @@ readonly class Invoice
         public readonly ?string $title = null,
         public readonly ?array $xRechnung = null,
         public readonly ?string $printLayoutId = null,
+        public readonly ?string $addressSupplement = null,
     ) {
     }
 
@@ -55,6 +56,10 @@ readonly class Invoice
 
         if ($this->contactId !== null) {
             $data['address']['contactId'] = $this->contactId;
+        }
+
+        if ($this->addressSupplement !== null) {
+            $data['address']['supplement'] = $this->addressSupplement;
         }
 
         if ($this->introduction !== null) {
@@ -128,6 +133,7 @@ readonly class Invoice
             title: $data['title'] ?? null,
             xRechnung: $data['xRechnung'] ?? null,
             printLayoutId: $data['printLayoutId'] ?? null,
+            addressSupplement: $address['supplement'] ?? null,
         );
     }
 }
