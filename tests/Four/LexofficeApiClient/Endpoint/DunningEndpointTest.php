@@ -1,0 +1,151 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Four\LexofficeApiClient\Tests\Endpoint;
+
+use Four\LexofficeApiClient\DTO\Dunning;
+use Four\LexofficeApiClient\Endpoint\DunningEndpoint;
+use Four\LexofficeApiClient\Exception\LexofficeException;
+use Four\LexofficeApiClient\LexofficeClient;
+use Http\Mock\Client as MockClient;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+
+class DunningEndpointTest extends TestCase
+{
+    private MockClient $mockHttpClient;
+    private Psr17Factory $psr17Factory;
+    private DunningEndpoint $endpoint;
+
+    protected function setUp(): void
+    {
+        $this->mockHttpClient = new MockClient();
+        $this->psr17Factory = new Psr17Factory();
+        $client = new LexofficeClient(
+            'test-api-key',
+            $this->mockHttpClient,
+            $this->psr17Factory,
+            $this->psr17Factory,
+        );
+        $this->endpoint = new DunningEndpoint($client);
+    }
+
+    public function testCreateReturnsId(): void
+    {
+        $this->addJsonResponse(201, '{"id":"d1","resourceUri":"/v1/dunnings/d1","version":1}');
+
+        $result = $this->endpoint->create($this->dunning());
+
+        self::assertSame('d1', $result['id']);
+        self::assertSame(1, $result['version']);
+
+        $request = $this->lastRequest();
+        self::assertSame('POST', $request->getMethod());
+        self::assertSame('/v1/dunnings', $request->getUri()->getPath());
+        self::assertSame('', $request->getUri()->getQuery());
+    }
+
+    public function testCreateWithFinalizeAddsQueryParameter(): void
+    {
+        $this->addJsonResponse(201, '{"id":"d1"}');
+
+        $this->endpoint->create($this->dunning(), true);
+
+        $request = $this->lastRequest();
+        self::assertSame('finalize=true', $request->getUri()->getQuery());
+    }
+
+    public function testPursueBuildsPrecedingVoucherQuery(): void
+    {
+        $this->addJsonResponse(201, '{"id":"d2"}');
+
+        $result = $this->endpoint->pursue('v1', $this->dunning());
+
+        self::assertSame('d2', $result['id']);
+
+        $request = $this->lastRequest();
+        self::assertSame('/v1/dunnings', $request->getUri()->getPath());
+        self::assertSame('precedingSalesVoucherId=v1', $request->getUri()->getQuery());
+    }
+
+    public function testPursueWithFinalizeAddsBothQueryParameters(): void
+    {
+        $this->addJsonResponse(201, '{"id":"d2"}');
+
+        $this->endpoint->pursue('v1', $this->dunning(), true);
+
+        $request = $this->lastRequest();
+        self::assertSame('precedingSalesVoucherId=v1&finalize=true', $request->getUri()->getQuery());
+    }
+
+    public function testGetReturnsDunning(): void
+    {
+        $this->addJsonResponse(200, '{"id":"d1","voucherNumber":"MA-0001"}');
+
+        $result = $this->endpoint->get('d1');
+
+        self::assertSame('d1', $result['id']);
+        self::assertSame('MA-0001', $result['voucherNumber']);
+
+        $request = $this->lastRequest();
+        self::assertSame('/v1/dunnings/d1', $request->getUri()->getPath());
+    }
+
+    public function testGetThrowsOn404(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(404));
+
+        $this->expectException(LexofficeException::class);
+        $this->endpoint->get('missing');
+    }
+
+    public function testDownloadPdfReturnsBytes(): void
+    {
+        $pdf = '%PDF-1.4 dunning';
+        $this->mockHttpClient->addResponse(new Response(
+            200,
+            ['Content-Type' => 'application/pdf'],
+            $this->psr17Factory->createStream($pdf),
+        ));
+
+        self::assertSame($pdf, $this->endpoint->downloadPdf('d1'));
+
+        $request = $this->lastRequest();
+        self::assertSame('/v1/dunnings/d1/document', $request->getUri()->getPath());
+    }
+
+    private function dunning(): Dunning
+    {
+        return new Dunning(
+            voucherDate: '2026-01-15',
+            addressName: 'Max Mustermann',
+            addressStreet: 'Musterstraße 1',
+            addressCity: 'Berlin',
+            addressZip: '10115',
+            addressCountryCode: 'DE',
+            lineItems: [],
+        );
+    }
+
+    private function addJsonResponse(int $status, string $json): void
+    {
+        $this->mockHttpClient->addResponse(new Response(
+            $status,
+            ['Content-Type' => 'application/json'],
+            $this->psr17Factory->createStream($json),
+        ));
+    }
+
+    private function lastRequest(): RequestInterface
+    {
+        $request = $this->mockHttpClient->getLastRequest();
+        if ($request === false) {
+            self::fail('No request was sent');
+        }
+
+        return $request;
+    }
+}
