@@ -80,4 +80,63 @@ class DunningTest extends TestCase
 
         self::assertArrayNotHasKey('remark', $data);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $dunning = Dunning::fromArray([
+            'voucherDate' => '2026-02-25',
+            'address'     => [
+                'name'        => 'Max Mustermann',
+                'street'      => 'Musterstraße 1',
+                'city'        => 'Berlin',
+                'zip'         => '10115',
+                'countryCode' => 'DE',
+                'contactId'   => 'contact-uuid-123',
+            ],
+            'lineItems' => [
+                [
+                    'name'      => 'Handgemachte Tasse',
+                    'quantity'  => 1,
+                    'unitName'  => 'Stück',
+                    'unitPrice' => [
+                        'currency'          => 'EUR',
+                        'netAmount'         => 25.21,
+                        'taxRatePercentage' => 19.0,
+                    ],
+                ],
+            ],
+            'taxConditions' => ['taxType' => 'net'],
+            'introduction'  => 'Intro',
+            'remark'        => 'Remark',
+        ]);
+
+        self::assertSame('2026-02-25', $dunning->voucherDate);
+        self::assertSame('Max Mustermann', $dunning->addressName);
+        self::assertSame('Musterstraße 1', $dunning->addressStreet);
+        self::assertSame('Berlin', $dunning->addressCity);
+        self::assertSame('10115', $dunning->addressZip);
+        self::assertSame('DE', $dunning->addressCountryCode);
+        self::assertCount(1, $dunning->lineItems);
+        self::assertSame('net', $dunning->taxType);
+        self::assertSame('contact-uuid-123', $dunning->contactId);
+        self::assertSame('Intro', $dunning->introduction);
+        self::assertSame('Remark', $dunning->remark);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $dunning = Dunning::fromArray([]);
+
+        self::assertSame('', $dunning->voucherDate);
+        self::assertSame('', $dunning->addressName);
+        self::assertSame('', $dunning->addressStreet);
+        self::assertSame('', $dunning->addressCity);
+        self::assertSame('', $dunning->addressZip);
+        self::assertSame('', $dunning->addressCountryCode);
+        self::assertSame([], $dunning->lineItems);
+        self::assertSame('gross', $dunning->taxType);
+        self::assertNull($dunning->contactId);
+        self::assertNull($dunning->introduction);
+        self::assertNull($dunning->remark);
+    }
 }

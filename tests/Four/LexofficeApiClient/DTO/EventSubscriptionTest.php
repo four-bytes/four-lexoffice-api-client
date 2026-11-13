@@ -51,4 +51,32 @@ class EventSubscriptionTest extends TestCase
         self::assertSame('dunning.created', EventSubscription::EVENT_DUNNING_CREATED);
         self::assertSame('delivery-note.status.changed', EventSubscription::EVENT_DELIVERY_NOTE_STATUS_CHANGED);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $subscription = EventSubscription::fromArray([
+            'callbackUrl' => 'https://example.com/webhook',
+            'eventTypes'  => [
+                3 => EventSubscription::EVENT_INVOICE_CREATED,
+                7 => EventSubscription::EVENT_PAYMENT_CHANGED,
+            ],
+            'active' => false,
+        ]);
+
+        self::assertSame('https://example.com/webhook', $subscription->callbackUrl);
+        self::assertSame(
+            [EventSubscription::EVENT_INVOICE_CREATED, EventSubscription::EVENT_PAYMENT_CHANGED],
+            $subscription->eventTypes,
+        );
+        self::assertFalse($subscription->active);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $subscription = EventSubscription::fromArray([]);
+
+        self::assertSame('', $subscription->callbackUrl);
+        self::assertSame([], $subscription->eventTypes);
+        self::assertTrue($subscription->active);
+    }
 }

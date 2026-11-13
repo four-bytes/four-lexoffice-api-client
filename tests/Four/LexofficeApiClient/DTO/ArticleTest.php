@@ -78,4 +78,52 @@ class ArticleTest extends TestCase
         self::assertSame('PRODUCT', Article::TYPE_PRODUCT);
         self::assertSame('SERVICE', Article::TYPE_SERVICE);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $article = Article::fromArray([
+            'title'         => 'Testprodukt',
+            'type'          => Article::TYPE_SERVICE,
+            'unitName'      => 'Std.',
+            'price'         => [
+                'netPrice'     => 80.5,
+                'leadingPrice' => 'GROSS',
+                'taxRate'      => 7,
+            ],
+            'description'   => 'Beschreibung',
+            'articleNumber' => 'ART-001',
+            'gtin'          => '4012345678901',
+            'note'          => 'Interne Notiz',
+            'version'       => 3,
+        ]);
+
+        self::assertSame('Testprodukt', $article->title);
+        self::assertSame(Article::TYPE_SERVICE, $article->type);
+        self::assertSame('Std.', $article->unitName);
+        self::assertSame(80.5, $article->netPrice);
+        self::assertSame('GROSS', $article->leadingPrice);
+        self::assertSame(7, $article->taxRate);
+        self::assertSame('Beschreibung', $article->description);
+        self::assertSame('ART-001', $article->articleNumber);
+        self::assertSame('4012345678901', $article->gtin);
+        self::assertSame('Interne Notiz', $article->note);
+        self::assertSame(3, $article->version);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $article = Article::fromArray([]);
+
+        self::assertSame('', $article->title);
+        self::assertSame(Article::TYPE_PRODUCT, $article->type);
+        self::assertSame('', $article->unitName);
+        self::assertSame(0.0, $article->netPrice);
+        self::assertSame('NET', $article->leadingPrice);
+        self::assertSame(19, $article->taxRate);
+        self::assertNull($article->description);
+        self::assertNull($article->articleNumber);
+        self::assertNull($article->gtin);
+        self::assertNull($article->note);
+        self::assertSame(0, $article->version);
+    }
 }

@@ -100,4 +100,85 @@ class InvoiceTest extends TestCase
 
         self::assertArrayNotHasKey('supplement', $data['address']);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $invoice = Invoice::fromArray([
+            'voucherDate' => '2026-02-25',
+            'address'     => [
+                'name'        => 'Max Mustermann',
+                'street'      => 'Musterstraße 1',
+                'city'        => 'Berlin',
+                'zip'         => '10115',
+                'countryCode' => 'DE',
+                'contactId'   => 'contact-uuid-123',
+                'supplement'  => 'c/o Four Bytes GmbH',
+            ],
+            'lineItems' => [
+                [
+                    'name'      => 'Handgemachte Tasse',
+                    'quantity'  => 1,
+                    'unitName'  => 'Stück',
+                    'unitPrice' => [
+                        'currency'          => 'EUR',
+                        'netAmount'         => 25.21,
+                        'taxRatePercentage' => 19.0,
+                    ],
+                ],
+            ],
+            'taxConditions'      => ['taxType' => 'net'],
+            'introduction'       => 'Intro',
+            'remark'             => 'Remark',
+            'paymentConditions'  => ['id' => 'payment-1'],
+            'shippingConditions' => ['shippingDate' => '2026-03-01'],
+            'totalPrice'         => ['totalGrossAmount' => 30.0],
+            'title'              => 'Rechnung',
+            'xRechnung'          => ['buyerReference' => 'ref-1'],
+            'printLayoutId'      => 'layout-1',
+        ]);
+
+        self::assertSame('2026-02-25', $invoice->voucherDate);
+        self::assertSame('Max Mustermann', $invoice->addressName);
+        self::assertSame('Musterstraße 1', $invoice->addressStreet);
+        self::assertSame('Berlin', $invoice->addressCity);
+        self::assertSame('10115', $invoice->addressZip);
+        self::assertSame('DE', $invoice->addressCountryCode);
+        self::assertCount(1, $invoice->lineItems);
+        self::assertSame('Handgemachte Tasse', $invoice->lineItems[0]->name);
+        self::assertSame('net', $invoice->taxType);
+        self::assertSame('contact-uuid-123', $invoice->contactId);
+        self::assertSame('Intro', $invoice->introduction);
+        self::assertSame('Remark', $invoice->remark);
+        self::assertSame('payment-1', $invoice->paymentConditionId);
+        self::assertSame('2026-03-01', $invoice->shippingConditionsDate);
+        self::assertSame(['totalGrossAmount' => 30.0], $invoice->totalPrice);
+        self::assertSame('Rechnung', $invoice->title);
+        self::assertSame(['buyerReference' => 'ref-1'], $invoice->xRechnung);
+        self::assertSame('layout-1', $invoice->printLayoutId);
+        self::assertSame('c/o Four Bytes GmbH', $invoice->addressSupplement);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $invoice = Invoice::fromArray([]);
+
+        self::assertSame('', $invoice->voucherDate);
+        self::assertSame('', $invoice->addressName);
+        self::assertSame('', $invoice->addressStreet);
+        self::assertSame('', $invoice->addressCity);
+        self::assertSame('', $invoice->addressZip);
+        self::assertSame('', $invoice->addressCountryCode);
+        self::assertSame([], $invoice->lineItems);
+        self::assertSame('gross', $invoice->taxType);
+        self::assertNull($invoice->contactId);
+        self::assertNull($invoice->introduction);
+        self::assertNull($invoice->remark);
+        self::assertNull($invoice->paymentConditionId);
+        self::assertNull($invoice->shippingConditionsDate);
+        self::assertNull($invoice->totalPrice);
+        self::assertNull($invoice->title);
+        self::assertNull($invoice->xRechnung);
+        self::assertNull($invoice->printLayoutId);
+        self::assertNull($invoice->addressSupplement);
+    }
 }

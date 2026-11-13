@@ -78,4 +78,55 @@ class VoucherTest extends TestCase
         self::assertSame('100.00', $data['totalGrossAmount']);
         self::assertSame('15.97', $data['totalTaxAmount']);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $voucher = Voucher::fromArray([
+            'type'             => 'salesinvoice',
+            'voucherNumber'    => '2026100001',
+            'voucherDate'      => '2026-02-25',
+            'totalGrossAmount' => 29.90,
+            'totalTaxAmount'   => 4.77,
+            'contactId'        => 'test-uuid-123',
+            'remark'           => 'Bestellung #12345',
+            'shippingDate'     => '2026-02-26',
+            'taxType'          => 'net',
+            'voucherItems'     => [
+                [
+                    'amount'         => 29.90,
+                    'taxAmount'      => 4.77,
+                    'taxRatePercent' => 19,
+                    'categoryId'     => VoucherItem::CATEGORY_EU_SALES,
+                ],
+            ],
+        ]);
+
+        self::assertSame('salesinvoice', $voucher->type);
+        self::assertSame('2026100001', $voucher->voucherNumber);
+        self::assertSame('2026-02-25', $voucher->voucherDate);
+        self::assertSame(29.90, $voucher->totalGrossAmount);
+        self::assertSame(4.77, $voucher->totalTaxAmount);
+        self::assertSame('test-uuid-123', $voucher->contactId);
+        self::assertSame('Bestellung #12345', $voucher->remark);
+        self::assertSame('2026-02-26', $voucher->shippingDate);
+        self::assertSame('net', $voucher->taxType);
+        self::assertCount(1, $voucher->voucherItems);
+        self::assertSame(VoucherItem::CATEGORY_EU_SALES, $voucher->voucherItems[0]->categoryId);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $voucher = Voucher::fromArray([]);
+
+        self::assertSame('', $voucher->type);
+        self::assertSame('', $voucher->voucherNumber);
+        self::assertSame('', $voucher->voucherDate);
+        self::assertSame(0.0, $voucher->totalGrossAmount);
+        self::assertSame(0.0, $voucher->totalTaxAmount);
+        self::assertSame('', $voucher->contactId);
+        self::assertSame('', $voucher->remark);
+        self::assertNull($voucher->shippingDate);
+        self::assertSame('gross', $voucher->taxType);
+        self::assertSame([], $voucher->voucherItems);
+    }
 }

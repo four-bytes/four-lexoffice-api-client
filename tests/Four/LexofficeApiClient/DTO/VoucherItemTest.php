@@ -78,4 +78,29 @@ class VoucherItemTest extends TestCase
         self::assertSame('8.31', $data['taxAmount']);
         self::assertSame(25.5, $data['taxRatePercent']);
     }
+
+    public function testFromArrayParsesAllFields(): void
+    {
+        $item = VoucherItem::fromArray([
+            'amount'         => 29.90,
+            'taxAmount'      => 4.77,
+            'taxRatePercent' => 19.0,
+            'categoryId'     => VoucherItem::CATEGORY_EU_SALES,
+        ]);
+
+        self::assertSame(29.90, $item->amount);
+        self::assertSame(4.77, $item->taxAmount);
+        self::assertSame(19.0, $item->taxRatePercent);
+        self::assertSame(VoucherItem::CATEGORY_EU_SALES, $item->categoryId);
+    }
+
+    public function testFromArrayUsesDefaultsForMissingFields(): void
+    {
+        $item = VoucherItem::fromArray([]);
+
+        self::assertSame(0.0, $item->amount);
+        self::assertSame(0.0, $item->taxAmount);
+        self::assertSame(0.0, $item->taxRatePercent);
+        self::assertSame(VoucherItem::CATEGORY_INLAND_SALES, $item->categoryId);
+    }
 }
