@@ -1,24 +1,27 @@
 # four-lexoffice-api-client
 
-PHP API Client für die lexoffice / Lexware Office API v1.
+PHP API client for the lexoffice / Lexware Office API v1.
 
-## Projekt
-- Firma: fourbytes
+## Language
+English — code, docs, issues, PRs and commits are written in English.
+
+## Project
+- Company: Four Bytes
 - Org: four-bytes
-- Zweck: Rechnungen und Kontakte in lexoffice anlegen/verwalten
+- Purpose: create and manage invoices, contacts and vouchers in lexoffice
 
 ## Stack
-- PHP 8.2+
-- PSR-4 Autoloading
+- PHP 8.4+
+- PSR-4 autoloading
 - Dependencies: four-bytes/four-http-client (PSR-18), four-bytes/four-rate-limiting
 
 ## API
 - Base URL: https://api.lexoffice.io/v1/
 - Auth: Bearer Token
-- Rate Limit: 2 req/s (wir limitieren auf 1 req/s)
+- Rate Limit: 2 req/s (client throttles to 1 req/s for headroom)
 - Docs: https://developers.lexoffice.io/docs/
 
-## Wichtige Pfade
+## Key paths
 - Client: src/Four/LexofficeApiClient/LexofficeClient.php
 - DTOs: src/Four/LexofficeApiClient/DTO/
 - Endpoints: src/Four/LexofficeApiClient/Endpoint/

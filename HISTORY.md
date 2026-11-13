@@ -1,28 +1,44 @@
 # History
 
-## 0.5.1 (2026-02-27)
-- fix: taxRatePercent als float (war int) — unterstützt jetzt Komma-Steuersätze wie 25.5% (Finnland, Dänemark)
+## 0.5.1 — 2026-02-27
+- fix: `taxRatePercent` as float (was int) — now supports fractional tax rates such as 25.5% (Finland, Denmark)
 
-## 0.1.0 — 2026-02-25
-- Initiales Release
-- LexofficeClient: HTTP-Client mit Rate Limiting (1 req/s) + Retry (3x bei 429)
-- DTOs: Contact, Voucher, VoucherItem, FileUpload
-- Endpoints: ContactEndpoint, VoucherEndpoint, FileEndpoint
-- Exceptions: LexofficeException, RateLimitException
-- Portiert aus einer internen Legacy-Codebasis
+## 0.5.0 — 2026-02-26
+- **Breaking Change:** Contact DTO migrated to the nested API structure
+- New DTOs: ContactCompany, ContactPerson
+- ContactAddress: added `fromArray()`
+- Contact: `isCustomer`/`isVendor` instead of `isCompany`/`isVendor`, `company`/`person` objects, `billingAddresses[]`, `emailsBusiness/Office/Private/Other[]`, `phonesBusiness/Office/Mobile/Private/Fax/Other[]`, `xRechnungBuyerReference`, `xRechnungVendorNumber`, `fromArray()`
+- LexofficeClient: 20 endpoint factory methods (`contacts()`, `invoices()`, `articles()`, etc.)
+- Tests: 61 tests, 207 assertions (all green)
+
+## 0.4.0 — 2026-02-26
+- Endpoint: DunningEndpoint (dunning) — create, pursue, get, downloadPdf
+- Endpoint: DownPaymentInvoiceEndpoint (down payment invoices) — get, downloadPdf (read-only)
+- VoucherEndpoint: added `update()`
+- DTO: `fromArray()` for all DTOs — Invoice, CreditNote, Quotation, DeliveryNote, Dunning, Article, Voucher, VoucherItem, EventSubscription, InvoiceLineItem
+- Tests: 59 tests, 191 assertions (all green)
+
+## 0.3.0 — 2026-02-26
+- Replaced raw cURL transport with the PSR-18 HTTP client interface
+- Added `LexofficeClient::create(string $apiKey)` static factory using four-http-client
+- Rate limiting (1 req/s) is now handled by four-rate-limiting middleware
+- Retry logic (3x on 429) is now handled by four-http-client RetryMiddleware
+- Removed the `ext-curl` dependency
+- Added `four-bytes/four-http-client ^4.0` and `four-bytes/four-rate-limiting ^1.3`
+- Added PHPUnit 11 tests for the LexofficeClient transport layer
 
 ## 0.2.0 — 2026-02-25
-- LexofficeClient: BASE_URL auf api.lexware.io korrigiert (war lexoffice.io)
-- LexofficeClient: `downloadFile()` für PDF-Download (Accept: application/pdf, raw bytes)
-- DTO: PagedResponse (generisches Paging mit fromArray)
+- LexofficeClient: fixed BASE_URL to api.lexware.io (was lexoffice.io)
+- LexofficeClient: `downloadFile()` for PDF downloads (Accept: application/pdf, raw bytes)
+- DTO: PagedResponse (generic paging with fromArray)
 - DTO: Article + ArticlePrice (PRODUCT|SERVICE, toApiArray)
-- DTO: InvoiceLineItem (custom|material|service|text, unitPrice-Struktur)
+- DTO: InvoiceLineItem (custom|material|service|text, unitPrice structure)
 - DTO: Invoice, CreditNote, Quotation, OrderConfirmation (taxConditions, paymentConditions)
-- DTO: DeliveryNote (wie Invoice, ohne taxConditions/paymentConditions)
+- DTO: DeliveryNote (like Invoice, without taxConditions/paymentConditions)
 - DTO: Payment (read-only, fromArray)
-- DTO: EventSubscription (20 EVENT_*-Konstanten, toApiArray)
-- VoucherItem: 5 neue Kategorie-Konstanten (SERVICES, DISTANCE_SALES_EU, DISTANCE_SALES_EU_TAXABLE, THIRD_COUNTRY_SERVICE, SMALL_BUSINESS)
-- Endpoint: ArticleEndpoint (create, get, update, delete, list mit Paging)
+- DTO: EventSubscription (20 EVENT_* constants, toApiArray)
+- VoucherItem: 5 new category constants (SERVICES, DISTANCE_SALES_EU, DISTANCE_SALES_EU_TAXABLE, THIRD_COUNTRY_SERVICE, SMALL_BUSINESS)
+- Endpoint: ArticleEndpoint (create, get, update, delete, list with paging)
 - Endpoint: InvoiceEndpoint (create, pursue, get, downloadPdf)
 - Endpoint: CreditNoteEndpoint (create, pursue, get, downloadPdf)
 - Endpoint: DeliveryNoteEndpoint (create, get, downloadPdf)
@@ -30,31 +46,15 @@
 - Endpoint: OrderConfirmationEndpoint (create, pursue, get, downloadPdf)
 - Endpoint: PaymentEndpoint (get → Payment DTO)
 - Endpoint: EventSubscriptionEndpoint (create, get, list, delete)
-- Endpoint: VoucherlistEndpoint (list mit Filtern + PagedResponse)
-- Endpoint: CountryEndpoint, ProfileEndpoint, PaymentConditionEndpoint, PostingCategoryEndpoint, PrintLayoutEndpoint, RecurringTemplateEndpoint (alle read-only)
-- ContactEndpoint: findByEmail(), findByName(), list() mit PagedResponse ergänzt
-- Tests: 42 Tests, 166 Assertions (alle grün)
+- Endpoint: VoucherlistEndpoint (list with filters + PagedResponse)
+- Endpoint: CountryEndpoint, ProfileEndpoint, PaymentConditionEndpoint, PostingCategoryEndpoint, PrintLayoutEndpoint, RecurringTemplateEndpoint (all read-only)
+- ContactEndpoint: added findByEmail(), findByName(), list() with PagedResponse
+- Tests: 42 tests, 166 assertions (all green)
 
-## 0.5.0 — 2026-02-26
-- **Breaking Change:** Contact DTO auf verschachtelte API-Struktur migriert
-- Neue DTOs: ContactCompany, ContactPerson
-- ContactAddress: fromArray() ergänzt
-- Contact: isCustomer/isVendor statt isCompany/isVendor, company/person-Objekte, billingAddresses[], emailsBusiness/Office/Private/Other[], phonesBusiness/Office/Mobile/Private/Fax/Other[], xRechnungBuyerReference, xRechnungVendorNumber, fromArray()
-- LexofficeClient: 20 Endpoint-Factory-Methoden (contacts(), invoices(), articles(), etc.)
-- Tests: 61 Tests, 207 Assertions (alle grün)
-
-## 0.4.0 — 2026-02-26
-- Endpoint: DunningEndpoint (Mahnwesen) — create, pursue, get, downloadPdf
-- Endpoint: DownPaymentInvoiceEndpoint (Abschlagsrechnungen) — get, downloadPdf (read-only)
-- VoucherEndpoint: update() ergänzt
-- DTO: fromArray() für alle DTOs — Invoice, CreditNote, Quotation, DeliveryNote, Dunning, Article, Voucher, VoucherItem, EventSubscription, InvoiceLineItem
-- Tests: 59 Tests, 191 Assertions (alle grün)
-
-## 0.3.0 — 2026-02-26
-- Replaced raw cURL transport with PSR-18 HTTP client interface
-- Added `LexofficeClient::create(string $apiKey)` static factory using four-http-client
-- Rate limiting (1 req/s) now handled by four-rate-limiting middleware
-- Retry logic (3x on 429) now handled by four-http-client RetryMiddleware
-- Removed `ext-curl` dependency
-- Added `four-bytes/four-http-client ^4.0` and `four-bytes/four-rate-limiting ^1.3`
-- Added PHPUnit 11 tests for LexofficeClient transport layer
+## 0.1.0 — 2026-02-25
+- Initial release
+- LexofficeClient: HTTP client with rate limiting (1 req/s) + retry (3x on 429)
+- DTOs: Contact, Voucher, VoucherItem, FileUpload
+- Endpoints: ContactEndpoint, VoucherEndpoint, FileEndpoint
+- Exceptions: LexofficeException, RateLimitException
+- Ported from an internal legacy codebase
