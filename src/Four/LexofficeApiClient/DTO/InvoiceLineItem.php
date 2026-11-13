@@ -58,11 +58,11 @@ readonly class InvoiceLineItem
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $unitPrice = $data['unitPrice'] ?? [];
 
-        return new static(
+        return new self(
             name:                 $data['name'] ?? '',
             quantity:             (float) ($data['quantity'] ?? 1),
             unitName:             $data['unitName'] ?? '',

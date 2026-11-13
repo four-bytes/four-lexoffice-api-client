@@ -106,7 +106,7 @@ readonly class Contact
     }
 
     /** @param array<string, mixed> $data */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $roles = $data['roles'] ?? [];
 
@@ -120,7 +120,7 @@ readonly class Contact
         $phones = $data['phoneNumbers']   ?? [];
         $xr     = $data['xRechnung']      ?? [];
 
-        return new static(
+        return new self(
             version:                 $data['version'] ?? 0,
             isCustomer:              isset($roles['customer']),
             isVendor:                isset($roles['vendor']),

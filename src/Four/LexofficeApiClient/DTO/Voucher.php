@@ -59,7 +59,7 @@ readonly class Voucher
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $voucherItems = [];
         if (isset($data['voucherItems']) && is_array($data['voucherItems'])) {
@@ -69,7 +69,7 @@ readonly class Voucher
             );
         }
 
-        return new static(
+        return new self(
             type:             $data['type'] ?? '',
             voucherNumber:    $data['voucherNumber'] ?? '',
             voucherDate:      $data['voucherDate'] ?? '',

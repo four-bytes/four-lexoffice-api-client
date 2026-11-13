@@ -65,11 +65,11 @@ readonly class Article
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $price = $data['price'] ?? [];
 
-        return new static(
+        return new self(
             title:       $data['title'] ?? '',
             type:        $data['type'] ?? self::TYPE_PRODUCT,
             unitName:    $data['unitName'] ?? '',

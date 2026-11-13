@@ -31,13 +31,13 @@ readonly class ContactCompany
     }
 
     /** @param array<string, mixed> $data */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $persons = array_map(
             static fn(array $p) => ContactPerson::fromArray($p),
             $data['contactPersons'] ?? [],
         );
-        return new static(
+        return new self(
             name:                 $data['name'] ?? '',
             taxNumber:            $data['taxNumber'] ?? '',
             vatRegistrationId:    $data['vatRegistrationId'] ?? '',

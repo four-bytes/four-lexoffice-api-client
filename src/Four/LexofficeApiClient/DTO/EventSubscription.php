@@ -55,9 +55,9 @@ readonly class EventSubscription
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             callbackUrl: $data['callbackUrl'] ?? '',
             eventTypes: array_values($data['eventTypes'] ?? []),
             active:     $data['active'] ?? true,

@@ -27,9 +27,9 @@ readonly class ContactPerson
     }
 
     /** @param array<string, mixed> $data */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             lastName:     $data['lastName'] ?? '',
             firstName:    $data['firstName'] ?? '',
             salutation:   $data['salutation'] ?? '',

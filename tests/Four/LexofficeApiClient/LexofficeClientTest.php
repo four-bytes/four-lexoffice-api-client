@@ -30,6 +30,14 @@ class LexofficeClientTest extends TestCase
         );
     }
 
+    public function testDeeplinkUrl(): void
+    {
+        $this->assertSame(
+            'https://app.lexoffice.de/permalink/contacts/view/abc-123',
+            $this->client->deeplinkUrl('contacts', 'abc-123'),
+        );
+    }
+
     public function testSendRequestGet(): void
     {
         $body = $this->psr17Factory->createStream('{"id":"abc123","name":"Test"}');

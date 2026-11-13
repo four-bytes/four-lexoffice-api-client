@@ -71,7 +71,7 @@ readonly class DeliveryNote
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
         $address = $data['address'] ?? [];
         $lineItems = array_map(
@@ -79,7 +79,7 @@ readonly class DeliveryNote
             $data['lineItems'] ?? [],
         );
 
-        return new static(
+        return new self(
             voucherDate:             $data['voucherDate'] ?? '',
             addressName:             $address['name'] ?? '',
             addressStreet:           $address['street'] ?? '',
