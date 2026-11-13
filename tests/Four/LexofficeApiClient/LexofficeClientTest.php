@@ -33,7 +33,7 @@ class LexofficeClientTest extends TestCase
     public function testDeeplinkUrl(): void
     {
         $this->assertSame(
-            'https://app.lexoffice.de/permalink/contacts/view/abc-123',
+            'https://app.lexware.de/permalink/contacts/view/abc-123',
             $this->client->deeplinkUrl('contacts', 'abc-123'),
         );
     }

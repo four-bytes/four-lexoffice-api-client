@@ -20,7 +20,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 class LexofficeClient
 {
     private const BASE_URL = 'https://api.lexware.io/v1/';
-    private const APP_URL = 'https://app.lexoffice.de';
+    private const APP_URL = 'https://app.lexware.de';
     private const USER_AGENT = 'four-lexoffice-api-client/0.3';
 
     public function __construct(
