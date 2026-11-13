@@ -52,9 +52,9 @@ readonly class VoucherItem
      *
      * @param array<string, mixed> $data
      */
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             amount:         (float) ($data['amount'] ?? 0),
             taxAmount:      (float) ($data['taxAmount'] ?? 0),
             taxRatePercent: (float) ($data['taxRatePercent'] ?? 0),

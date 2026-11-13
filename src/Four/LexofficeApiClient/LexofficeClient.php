@@ -20,6 +20,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 class LexofficeClient
 {
     private const BASE_URL = 'https://api.lexware.io/v1/';
+    private const APP_URL = 'https://app.lexoffice.de';
     private const USER_AGENT = 'four-lexoffice-api-client/0.3';
 
     public function __construct(
@@ -60,6 +61,17 @@ class LexofficeClient
         $psr17 = new Psr17Factory();
 
         return new self($apiKey, $psrClient, $psr17, $psr17);
+    }
+
+    /**
+     * Builds a deeplink to a resource in the lexoffice web app.
+     *
+     * @param string $resource Resource type (e.g. "contacts", "invoices", "vouchers").
+     * @param string $id       Resource id.
+     */
+    public function deeplinkUrl(string $resource, string $id): string
+    {
+        return self::APP_URL . '/permalink/' . $resource . '/view/' . $id;
     }
 
     /**
