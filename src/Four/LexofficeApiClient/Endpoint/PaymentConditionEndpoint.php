@@ -7,7 +7,7 @@ namespace Four\LexofficeApiClient\Endpoint;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class PaymentConditionEndpoint
+class PaymentConditionEndpoint implements PaymentConditionEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

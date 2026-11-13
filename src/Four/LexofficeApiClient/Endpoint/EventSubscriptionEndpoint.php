@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\EventSubscription;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class EventSubscriptionEndpoint
+class EventSubscriptionEndpoint implements EventSubscriptionEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\Dunning;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class DunningEndpoint
+class DunningEndpoint implements DunningEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

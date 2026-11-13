@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\Voucher;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class VoucherEndpoint
+class VoucherEndpoint implements VoucherEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

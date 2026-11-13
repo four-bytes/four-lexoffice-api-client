@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\Invoice;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class InvoiceEndpoint
+class InvoiceEndpoint implements InvoiceEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\Payment;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class PaymentEndpoint
+class PaymentEndpoint implements PaymentEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

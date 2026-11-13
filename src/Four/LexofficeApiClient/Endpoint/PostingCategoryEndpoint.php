@@ -7,7 +7,7 @@ namespace Four\LexofficeApiClient\Endpoint;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class PostingCategoryEndpoint
+class PostingCategoryEndpoint implements PostingCategoryEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

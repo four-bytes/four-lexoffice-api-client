@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\DTO\PagedResponse;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class ContactEndpoint
+class ContactEndpoint implements ContactEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

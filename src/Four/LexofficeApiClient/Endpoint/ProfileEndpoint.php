@@ -7,7 +7,7 @@ namespace Four\LexofficeApiClient\Endpoint;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class ProfileEndpoint
+class ProfileEndpoint implements ProfileEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

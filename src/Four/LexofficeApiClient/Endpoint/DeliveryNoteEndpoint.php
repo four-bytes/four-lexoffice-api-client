@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\DeliveryNote;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class DeliveryNoteEndpoint
+class DeliveryNoteEndpoint implements DeliveryNoteEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

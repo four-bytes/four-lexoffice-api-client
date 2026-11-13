@@ -268,102 +268,102 @@ class LexofficeClient
 
     // --- Endpoint-Factories ---
 
-    public function contacts(): \Four\LexofficeApiClient\Endpoint\ContactEndpoint
+    public function contacts(): \Four\LexofficeApiClient\Endpoint\ContactEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\ContactEndpoint($this);
     }
 
-    public function invoices(): \Four\LexofficeApiClient\Endpoint\InvoiceEndpoint
+    public function invoices(): \Four\LexofficeApiClient\Endpoint\InvoiceEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\InvoiceEndpoint($this);
     }
 
-    public function creditNotes(): \Four\LexofficeApiClient\Endpoint\CreditNoteEndpoint
+    public function creditNotes(): \Four\LexofficeApiClient\Endpoint\CreditNoteEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\CreditNoteEndpoint($this);
     }
 
-    public function deliveryNotes(): \Four\LexofficeApiClient\Endpoint\DeliveryNoteEndpoint
+    public function deliveryNotes(): \Four\LexofficeApiClient\Endpoint\DeliveryNoteEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\DeliveryNoteEndpoint($this);
     }
 
-    public function quotations(): \Four\LexofficeApiClient\Endpoint\QuotationEndpoint
+    public function quotations(): \Four\LexofficeApiClient\Endpoint\QuotationEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\QuotationEndpoint($this);
     }
 
-    public function orderConfirmations(): \Four\LexofficeApiClient\Endpoint\OrderConfirmationEndpoint
+    public function orderConfirmations(): \Four\LexofficeApiClient\Endpoint\OrderConfirmationEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\OrderConfirmationEndpoint($this);
     }
 
-    public function dunnings(): \Four\LexofficeApiClient\Endpoint\DunningEndpoint
+    public function dunnings(): \Four\LexofficeApiClient\Endpoint\DunningEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\DunningEndpoint($this);
     }
 
-    public function downPaymentInvoices(): \Four\LexofficeApiClient\Endpoint\DownPaymentInvoiceEndpoint
+    public function downPaymentInvoices(): \Four\LexofficeApiClient\Endpoint\DownPaymentInvoiceEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\DownPaymentInvoiceEndpoint($this);
     }
 
-    public function articles(): \Four\LexofficeApiClient\Endpoint\ArticleEndpoint
+    public function articles(): \Four\LexofficeApiClient\Endpoint\ArticleEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\ArticleEndpoint($this);
     }
 
-    public function vouchers(): \Four\LexofficeApiClient\Endpoint\VoucherEndpoint
+    public function vouchers(): \Four\LexofficeApiClient\Endpoint\VoucherEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\VoucherEndpoint($this);
     }
 
-    public function files(): \Four\LexofficeApiClient\Endpoint\FileEndpoint
+    public function files(): \Four\LexofficeApiClient\Endpoint\FileEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\FileEndpoint($this);
     }
 
-    public function payments(): \Four\LexofficeApiClient\Endpoint\PaymentEndpoint
+    public function payments(): \Four\LexofficeApiClient\Endpoint\PaymentEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\PaymentEndpoint($this);
     }
 
-    public function eventSubscriptions(): \Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint
+    public function eventSubscriptions(): \Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint($this);
     }
 
-    public function voucherlist(): \Four\LexofficeApiClient\Endpoint\VoucherlistEndpoint
+    public function voucherlist(): \Four\LexofficeApiClient\Endpoint\VoucherlistEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\VoucherlistEndpoint($this);
     }
 
-    public function countries(): \Four\LexofficeApiClient\Endpoint\CountryEndpoint
+    public function countries(): \Four\LexofficeApiClient\Endpoint\CountryEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\CountryEndpoint($this);
     }
 
-    public function profile(): \Four\LexofficeApiClient\Endpoint\ProfileEndpoint
+    public function profile(): \Four\LexofficeApiClient\Endpoint\ProfileEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\ProfileEndpoint($this);
     }
 
-    public function paymentConditions(): \Four\LexofficeApiClient\Endpoint\PaymentConditionEndpoint
+    public function paymentConditions(): \Four\LexofficeApiClient\Endpoint\PaymentConditionEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\PaymentConditionEndpoint($this);
     }
 
-    public function postingCategories(): \Four\LexofficeApiClient\Endpoint\PostingCategoryEndpoint
+    public function postingCategories(): \Four\LexofficeApiClient\Endpoint\PostingCategoryEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\PostingCategoryEndpoint($this);
     }
 
-    public function printLayouts(): \Four\LexofficeApiClient\Endpoint\PrintLayoutEndpoint
+    public function printLayouts(): \Four\LexofficeApiClient\Endpoint\PrintLayoutEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\PrintLayoutEndpoint($this);
     }
 
-    public function recurringTemplates(): \Four\LexofficeApiClient\Endpoint\RecurringTemplateEndpoint
+    public function recurringTemplates(): \Four\LexofficeApiClient\Endpoint\RecurringTemplateEndpointInterface
     {
         return new \Four\LexofficeApiClient\Endpoint\RecurringTemplateEndpoint($this);
     }

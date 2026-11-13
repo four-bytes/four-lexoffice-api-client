@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\CreditNote;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class CreditNoteEndpoint
+class CreditNoteEndpoint implements CreditNoteEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\Quotation;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class QuotationEndpoint
+class QuotationEndpoint implements QuotationEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,

@@ -8,7 +8,7 @@ use Four\LexofficeApiClient\DTO\OrderConfirmation;
 use Four\LexofficeApiClient\Exception\LexofficeException;
 use Four\LexofficeApiClient\LexofficeClient;
 
-class OrderConfirmationEndpoint
+class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
 {
     public function __construct(
         private readonly LexofficeClient $client,
