@@ -63,7 +63,7 @@ readonly class Dunning
     }
 
     /**
-     * Erstellt eine Dunning-Instanz aus einer API-Response.
+     * Creates an instance of Dunning from an API response.
      *
      * @param array<string, mixed> $data
      */

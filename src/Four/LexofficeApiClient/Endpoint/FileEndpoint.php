@@ -15,7 +15,7 @@ class FileEndpoint implements FileEndpointInterface
     }
 
     /**
-     * Lädt eine PDF-Datei zu einem Voucher hoch und gibt die Datei-ID zurück.
+     * Uploads a PDF file for a voucher and returns the file ID.
      *
      * @throws LexofficeException
      */
@@ -39,7 +39,7 @@ class FileEndpoint implements FileEndpointInterface
     }
 
     /**
-     * Lädt eine Eingangsrechnung als Datei hoch und gibt die Datei-ID zurück.
+     * Uploads an incoming invoice as a file and returns the file ID.
      *
      * @throws LexofficeException
      */

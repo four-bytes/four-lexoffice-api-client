@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface PaymentEndpointInterface
 {
     /**
-     * Gibt den Zahlungsstatus eines Vouchers zurück (read-only).
+     * Returns the payment status of a voucher (read-only).
      *
      * @throws LexofficeException
      */

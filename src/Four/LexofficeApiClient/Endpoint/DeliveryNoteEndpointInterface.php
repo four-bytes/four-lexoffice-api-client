@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface DeliveryNoteEndpointInterface
 {
     /**
-     * Erstellt einen neuen Lieferschein.
+     * Creates a new delivery note.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -18,7 +18,7 @@ interface DeliveryNoteEndpointInterface
     public function create(DeliveryNote $deliveryNote, bool $finalize = false): array;
 
     /**
-     * Gibt einen Lieferschein anhand der ID zurück.
+     * Returns a delivery note by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -26,7 +26,7 @@ interface DeliveryNoteEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Lädt die PDF-Datei eines Lieferscheins herunter.
+     * Downloads the PDF file of a delivery note.
      *
      * @throws LexofficeException
      */

@@ -75,7 +75,7 @@ class LexofficeClient
     }
 
     /**
-     * Sendet einen HTTP-Request an die lexoffice API.
+     * Sends an HTTP request to the lexoffice API.
      *
      * @return array<mixed>
      * @throws LexofficeException
@@ -141,7 +141,7 @@ class LexofficeClient
     }
 
     /**
-     * Lädt ein PDF von der API herunter und gibt die rohen Bytes zurück.
+     * Downloads a PDF from the API and returns the raw bytes.
      *
      * @throws LexofficeException
      * @throws RateLimitException
@@ -182,7 +182,7 @@ class LexofficeClient
     }
 
     /**
-     * Lädt eine Datei per multipart/form-data hoch.
+     * Uploads a file via multipart/form-data.
      *
      * @return array<mixed>
      * @throws LexofficeException

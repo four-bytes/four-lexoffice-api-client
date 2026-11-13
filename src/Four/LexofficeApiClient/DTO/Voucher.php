@@ -55,7 +55,7 @@ readonly class Voucher
     }
 
     /**
-     * Erstellt eine Voucher-Instanz aus einer API-Response.
+     * Creates an instance of Voucher from an API response.
      *
      * @param array<string, mixed> $data
      */

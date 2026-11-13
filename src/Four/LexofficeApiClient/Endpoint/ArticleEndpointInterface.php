@@ -11,7 +11,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface ArticleEndpointInterface
 {
     /**
-     * Legt einen neuen Artikel an.
+     * Creates a new article.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -19,7 +19,7 @@ interface ArticleEndpointInterface
     public function create(Article $article): array;
 
     /**
-     * Gibt einen Artikel anhand der ID zurück.
+     * Returns an article by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -27,7 +27,7 @@ interface ArticleEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Aktualisiert einen Artikel (Optimistic Locking: version mitgeben).
+     * Updates an article (optimistic locking: pass version).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -35,14 +35,14 @@ interface ArticleEndpointInterface
     public function update(string $id, Article $article): array;
 
     /**
-     * Löscht einen Artikel (204 No Content).
+     * Deletes an article (204 No Content).
      *
      * @throws LexofficeException
      */
     public function delete(string $id): void;
 
     /**
-     * Listet Artikel paginiert auf.
+     * Lists articles, paginated.
      *
      * @param array<string, string> $filters  Erlaubt: articleNumber, gtin, type
      * @throws LexofficeException

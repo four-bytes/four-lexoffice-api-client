@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface EventSubscriptionEndpointInterface
 {
     /**
-     * Erstellt ein neues Event-Subscription.
+     * Creates a new event subscription.
      *
      * @return array<string, mixed>  {id}
      * @throws LexofficeException
@@ -18,7 +18,7 @@ interface EventSubscriptionEndpointInterface
     public function create(EventSubscription $subscription): array;
 
     /**
-     * Gibt eine Event-Subscription anhand der ID zurück.
+     * Returns an event subscription by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -26,7 +26,7 @@ interface EventSubscriptionEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Gibt alle Event-Subscriptions zurück.
+     * Returns all event subscriptions.
      *
      * @return array<mixed>
      * @throws LexofficeException
@@ -34,7 +34,7 @@ interface EventSubscriptionEndpointInterface
     public function list(): array;
 
     /**
-     * Löscht eine Event-Subscription (204 No Content).
+     * Deletes an event subscription (204 No Content).
      *
      * @throws LexofficeException
      */

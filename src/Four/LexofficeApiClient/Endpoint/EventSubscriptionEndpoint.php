@@ -16,7 +16,7 @@ class EventSubscriptionEndpoint implements EventSubscriptionEndpointInterface
     }
 
     /**
-     * Erstellt ein neues Event-Subscription.
+     * Creates a new event subscription.
      *
      * @return array<string, mixed>  {id}
      * @throws LexofficeException
@@ -29,7 +29,7 @@ class EventSubscriptionEndpoint implements EventSubscriptionEndpointInterface
     }
 
     /**
-     * Gibt eine Event-Subscription anhand der ID zurück.
+     * Returns an event subscription by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -42,7 +42,7 @@ class EventSubscriptionEndpoint implements EventSubscriptionEndpointInterface
     }
 
     /**
-     * Gibt alle Event-Subscriptions zurück.
+     * Returns all event subscriptions.
      *
      * @return array<mixed>
      * @throws LexofficeException
@@ -55,7 +55,7 @@ class EventSubscriptionEndpoint implements EventSubscriptionEndpointInterface
     }
 
     /**
-     * Löscht eine Event-Subscription (204 No Content).
+     * Deletes an event subscription (204 No Content).
      *
      * @throws LexofficeException
      */

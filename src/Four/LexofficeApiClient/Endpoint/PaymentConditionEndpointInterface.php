@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface PaymentConditionEndpointInterface
 {
     /**
-     * Gibt alle Zahlungsbedingungen zurück.
+     * Returns all payment conditions.
      *
      * @return array<mixed>
      * @throws LexofficeException

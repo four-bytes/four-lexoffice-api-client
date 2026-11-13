@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface OrderConfirmationEndpointInterface
 {
     /**
-     * Erstellt eine neue Auftragsbestätigung.
+     * Creates a new order confirmation.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -18,7 +18,7 @@ interface OrderConfirmationEndpointInterface
     public function create(OrderConfirmation $orderConfirmation, bool $finalize = false): array;
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Auftragsbestätigung über (Pursue).
+     * Converts an existing voucher into a new order confirmation (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -26,7 +26,7 @@ interface OrderConfirmationEndpointInterface
     public function pursue(string $precedingId, OrderConfirmation $orderConfirmation, bool $finalize = false): array;
 
     /**
-     * Gibt eine Auftragsbestätigung anhand der ID zurück.
+     * Returns an order confirmation by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -34,7 +34,7 @@ interface OrderConfirmationEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Lädt die PDF-Datei einer Auftragsbestätigung herunter.
+     * Downloads the PDF file of an order confirmation.
      *
      * @throws LexofficeException
      */

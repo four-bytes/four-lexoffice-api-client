@@ -61,7 +61,7 @@ readonly class Article
     }
 
     /**
-     * Erstellt eine Article-Instanz aus einer API-Response.
+     * Creates an instance of Article from an API response.
      *
      * @param array<string, mixed> $data
      */

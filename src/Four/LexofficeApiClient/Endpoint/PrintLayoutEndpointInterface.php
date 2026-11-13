@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface PrintLayoutEndpointInterface
 {
     /**
-     * Gibt alle verfügbaren Print-Layouts zurück.
+     * Returns all available print layouts.
      *
      * @return array<mixed>
      * @throws LexofficeException

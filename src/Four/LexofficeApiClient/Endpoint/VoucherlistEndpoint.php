@@ -16,7 +16,7 @@ class VoucherlistEndpoint implements VoucherlistEndpointInterface
     }
 
     /**
-     * Listet Vouchers gefiltert und paginiert auf.
+     * Lists vouchers filtered and paginated.
      *
      * @param array<string, string> $filters  Erlaubt: voucherType, voucherStatus, contactId,
      *                                        voucherDateFrom (yyyy-MM-dd), voucherDateTo (yyyy-MM-dd), archived

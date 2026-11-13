@@ -67,7 +67,7 @@ readonly class DeliveryNote
     }
 
     /**
-     * Erstellt eine DeliveryNote-Instanz aus einer API-Response.
+     * Creates an instance of DeliveryNote from an API response.
      *
      * @param array<string, mixed> $data
      */

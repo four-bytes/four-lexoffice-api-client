@@ -17,7 +17,7 @@ class ArticleEndpoint implements ArticleEndpointInterface
     }
 
     /**
-     * Legt einen neuen Artikel an.
+     * Creates a new article.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -30,7 +30,7 @@ class ArticleEndpoint implements ArticleEndpointInterface
     }
 
     /**
-     * Gibt einen Artikel anhand der ID zurück.
+     * Returns an article by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -43,7 +43,7 @@ class ArticleEndpoint implements ArticleEndpointInterface
     }
 
     /**
-     * Aktualisiert einen Artikel (Optimistic Locking: version mitgeben).
+     * Updates an article (optimistic locking: pass version).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -56,7 +56,7 @@ class ArticleEndpoint implements ArticleEndpointInterface
     }
 
     /**
-     * Löscht einen Artikel (204 No Content).
+     * Deletes an article (204 No Content).
      *
      * @throws LexofficeException
      */
@@ -66,7 +66,7 @@ class ArticleEndpoint implements ArticleEndpointInterface
     }
 
     /**
-     * Listet Artikel paginiert auf.
+     * Lists articles, paginated.
      *
      * @param array<string, string> $filters  Erlaubt: articleNumber, gtin, type
      * @throws LexofficeException

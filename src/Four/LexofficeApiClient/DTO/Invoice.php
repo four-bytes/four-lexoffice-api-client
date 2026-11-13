@@ -105,7 +105,7 @@ readonly class Invoice
     }
 
     /**
-     * Erstellt eine Invoice-Instanz aus einer API-Response.
+     * Creates an instance of Invoice from an API response.
      *
      * @param array<string, mixed> $data
      */

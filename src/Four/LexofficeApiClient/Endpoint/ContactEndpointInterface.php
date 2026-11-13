@@ -11,7 +11,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface ContactEndpointInterface
 {
     /**
-     * Gibt einen Kontakt anhand der ID zurück.
+     * Returns a contact by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -19,29 +19,29 @@ interface ContactEndpointInterface
     public function get(string $contactId): array;
 
     /**
-     * Erstellt einen neuen Kontakt und gibt die ID zurück.
+     * Creates a new contact and returns its ID.
      *
      * @throws LexofficeException
      */
     public function create(Contact $contact): string;
 
     /**
-     * Aktualisiert einen bestehenden Kontakt und gibt die ID zurück.
+     * Updates an existing contact and returns its ID.
      *
      * @throws LexofficeException
      */
     public function update(string $contactId, Contact $contact): string;
 
     /**
-     * Erstellt oder aktualisiert einen Kontakt (upsert).
-     * Wenn existingId übergeben wird, wird aktualisiert, sonst neu erstellt.
+     * Creates or updates a contact (upsert).
+     * If existingId is provided, the contact is updated, otherwise a new one is created.
      *
      * @throws LexofficeException
      */
     public function upsert(Contact $contact, ?string $existingId = null): string;
 
     /**
-     * Sucht einen Kontakt anhand der E-Mail-Adresse.
+     * Finds a contact by email address.
      *
      * @return array<string, mixed>|null
      * @throws LexofficeException
@@ -49,14 +49,14 @@ interface ContactEndpointInterface
     public function findByEmail(string $email): ?array;
 
     /**
-     * Sucht Kontakte anhand des Namens (paginiert).
+     * Finds contacts by name (paginated).
      *
      * @throws LexofficeException
      */
     public function findByName(string $name): PagedResponse;
 
     /**
-     * Listet Kontakte paginiert auf.
+     * Lists contacts, paginated.
      *
      * @param array<string, string> $filters
      * @throws LexofficeException

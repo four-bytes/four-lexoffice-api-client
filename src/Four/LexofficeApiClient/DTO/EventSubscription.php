@@ -6,7 +6,7 @@ namespace Four\LexofficeApiClient\DTO;
 
 readonly class EventSubscription
 {
-    // Verfügbare Event Types
+    // Available event types
     public const EVENT_INVOICE_CREATED                   = 'invoice.created';
     public const EVENT_INVOICE_CHANGED                   = 'invoice.changed';
     public const EVENT_INVOICE_DELETED                   = 'invoice.deleted';
@@ -51,7 +51,7 @@ readonly class EventSubscription
     }
 
     /**
-     * Erstellt eine EventSubscription-Instanz aus einer API-Response.
+     * Creates an instance of EventSubscription from an API response.
      *
      * @param array<string, mixed> $data
      */

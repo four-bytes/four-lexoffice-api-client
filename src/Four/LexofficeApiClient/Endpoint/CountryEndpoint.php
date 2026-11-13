@@ -15,7 +15,7 @@ class CountryEndpoint implements CountryEndpointInterface
     }
 
     /**
-     * Gibt alle verfügbaren Länder zurück.
+     * Returns all available countries.
      *
      * @return array<mixed>
      * @throws LexofficeException

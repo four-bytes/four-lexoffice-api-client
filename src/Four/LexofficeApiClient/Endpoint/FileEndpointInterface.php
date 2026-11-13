@@ -9,14 +9,14 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface FileEndpointInterface
 {
     /**
-     * Lädt eine PDF-Datei zu einem Voucher hoch und gibt die Datei-ID zurück.
+     * Uploads a PDF file for a voucher and returns the file ID.
      *
      * @throws LexofficeException
      */
     public function uploadToVoucher(string $voucherId, string $filePath): string;
 
     /**
-     * Lädt eine Eingangsrechnung als Datei hoch und gibt die Datei-ID zurück.
+     * Uploads an incoming invoice as a file and returns the file ID.
      *
      * @throws LexofficeException
      */

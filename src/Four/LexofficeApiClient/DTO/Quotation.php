@@ -80,7 +80,7 @@ readonly class Quotation
     }
 
     /**
-     * Erstellt eine Quotation-Instanz aus einer API-Response.
+     * Creates an instance of Quotation from an API response.
      *
      * @param array<string, mixed> $data
      */

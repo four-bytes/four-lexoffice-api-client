@@ -54,7 +54,7 @@ readonly class InvoiceLineItem
     }
 
     /**
-     * Erstellt eine InvoiceLineItem-Instanz aus einer API-Response.
+     * Creates an instance of InvoiceLineItem from an API response.
      *
      * @param array<string, mixed> $data
      */

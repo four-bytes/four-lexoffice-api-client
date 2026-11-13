@@ -15,7 +15,7 @@ class ProfileEndpoint implements ProfileEndpointInterface
     }
 
     /**
-     * Gibt das Profil des aktuellen API-Nutzers zurück.
+     * Returns the profile of the current API user.
      *
      * @return array<string, mixed>
      * @throws LexofficeException

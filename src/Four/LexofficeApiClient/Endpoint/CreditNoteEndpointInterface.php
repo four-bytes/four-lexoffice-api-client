@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface CreditNoteEndpointInterface
 {
     /**
-     * Erstellt eine neue Gutschrift.
+     * Creates a new credit note.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -18,7 +18,7 @@ interface CreditNoteEndpointInterface
     public function create(CreditNote $creditNote, bool $finalize = false): array;
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Gutschrift über (Pursue).
+     * Converts an existing voucher into a new credit note (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -26,7 +26,7 @@ interface CreditNoteEndpointInterface
     public function pursue(string $precedingId, CreditNote $creditNote, bool $finalize = false): array;
 
     /**
-     * Gibt eine Gutschrift anhand der ID zurück.
+     * Returns a credit note by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -34,7 +34,7 @@ interface CreditNoteEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Lädt die PDF-Datei einer Gutschrift herunter.
+     * Downloads the PDF file of a credit note.
      *
      * @throws LexofficeException
      */

@@ -16,7 +16,7 @@ class DunningEndpoint implements DunningEndpointInterface
     }
 
     /**
-     * Erstellt eine neue Mahnung (draft oder direkt finalisiert).
+     * Creates a new dunning notice (draft or directly finalized).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -31,7 +31,7 @@ class DunningEndpoint implements DunningEndpointInterface
     }
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Mahnung über (Pursue).
+     * Converts an existing voucher into a new dunning notice (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -49,7 +49,7 @@ class DunningEndpoint implements DunningEndpointInterface
     }
 
     /**
-     * Gibt eine Mahnung anhand der ID zurück.
+     * Returns a dunning notice by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -62,7 +62,7 @@ class DunningEndpoint implements DunningEndpointInterface
     }
 
     /**
-     * Lädt die PDF-Datei einer Mahnung herunter und gibt die rohen Bytes zurück.
+     * Downloads the PDF file of a dunning notice and returns the raw bytes.
      *
      * @throws LexofficeException
      */

@@ -17,7 +17,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Gibt einen Kontakt anhand der ID zurück.
+     * Returns a contact by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -30,7 +30,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Erstellt einen neuen Kontakt und gibt die ID zurück.
+     * Creates a new contact and returns its ID.
      *
      * @throws LexofficeException
      */
@@ -50,7 +50,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Aktualisiert einen bestehenden Kontakt und gibt die ID zurück.
+     * Updates an existing contact and returns its ID.
      *
      * @throws LexofficeException
      */
@@ -62,8 +62,8 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Erstellt oder aktualisiert einen Kontakt (upsert).
-     * Wenn existingId übergeben wird, wird aktualisiert, sonst neu erstellt.
+     * Creates or updates a contact (upsert).
+     * If existingId is provided, the contact is updated, otherwise a new one is created.
      *
      * @throws LexofficeException
      */
@@ -77,7 +77,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Sucht einen Kontakt anhand der E-Mail-Adresse.
+     * Finds a contact by email address.
      *
      * @return array<string, mixed>|null
      * @throws LexofficeException
@@ -97,7 +97,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Sucht Kontakte anhand des Namens (paginiert).
+     * Finds contacts by name (paginated).
      *
      * @throws LexofficeException
      */
@@ -109,7 +109,7 @@ class ContactEndpoint implements ContactEndpointInterface
     }
 
     /**
-     * Listet Kontakte paginiert auf.
+     * Lists contacts, paginated.
      *
      * @param array<string, string> $filters
      * @throws LexofficeException

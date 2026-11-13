@@ -15,7 +15,7 @@ class PostingCategoryEndpoint implements PostingCategoryEndpointInterface
     }
 
     /**
-     * Gibt alle Buchungskategorien zurück.
+     * Returns all posting categories.
      *
      * @return array<mixed>
      * @throws LexofficeException

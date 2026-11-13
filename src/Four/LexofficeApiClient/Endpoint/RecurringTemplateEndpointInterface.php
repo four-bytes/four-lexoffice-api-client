@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface RecurringTemplateEndpointInterface
 {
     /**
-     * Gibt alle Vorlagen für wiederkehrende Rechnungen paginiert zurück.
+     * Returns all recurring invoice templates, paginated.
      *
      * @return array<mixed>
      * @throws LexofficeException

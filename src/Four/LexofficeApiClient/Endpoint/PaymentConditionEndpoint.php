@@ -15,7 +15,7 @@ class PaymentConditionEndpoint implements PaymentConditionEndpointInterface
     }
 
     /**
-     * Gibt alle Zahlungsbedingungen zurück.
+     * Returns all payment conditions.
      *
      * @return array<mixed>
      * @throws LexofficeException

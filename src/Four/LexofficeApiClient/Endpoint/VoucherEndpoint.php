@@ -16,7 +16,7 @@ class VoucherEndpoint implements VoucherEndpointInterface
     }
 
     /**
-     * Gibt einen Voucher anhand der ID zurück.
+     * Returns a voucher by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -29,7 +29,7 @@ class VoucherEndpoint implements VoucherEndpointInterface
     }
 
     /**
-     * Erstellt einen neuen Voucher (Ausgangsrechnung) und gibt die ID zurück.
+     * Creates a new voucher (outgoing invoice) and returns its ID.
      *
      * @throws LexofficeException
      */
@@ -49,7 +49,7 @@ class VoucherEndpoint implements VoucherEndpointInterface
     }
 
     /**
-     * Aktualisiert einen bestehenden Voucher.
+     * Updates an existing voucher.
      *
      * @return array<string, mixed>
      * @throws LexofficeException

@@ -16,7 +16,7 @@ class CreditNoteEndpoint implements CreditNoteEndpointInterface
     }
 
     /**
-     * Erstellt eine neue Gutschrift.
+     * Creates a new credit note.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -31,7 +31,7 @@ class CreditNoteEndpoint implements CreditNoteEndpointInterface
     }
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Gutschrift über (Pursue).
+     * Converts an existing voucher into a new credit note (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -49,7 +49,7 @@ class CreditNoteEndpoint implements CreditNoteEndpointInterface
     }
 
     /**
-     * Gibt eine Gutschrift anhand der ID zurück.
+     * Returns a credit note by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -62,7 +62,7 @@ class CreditNoteEndpoint implements CreditNoteEndpointInterface
     }
 
     /**
-     * Lädt die PDF-Datei einer Gutschrift herunter.
+     * Downloads the PDF file of a credit note.
      *
      * @throws LexofficeException
      */

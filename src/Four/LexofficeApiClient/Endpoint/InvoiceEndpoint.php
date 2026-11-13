@@ -16,7 +16,7 @@ class InvoiceEndpoint implements InvoiceEndpointInterface
     }
 
     /**
-     * Erstellt eine neue Rechnung (draft oder direkt finalisiert).
+     * Creates a new invoice (draft or directly finalized).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -31,7 +31,7 @@ class InvoiceEndpoint implements InvoiceEndpointInterface
     }
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Rechnung über (Pursue).
+     * Converts an existing voucher into a new invoice (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -49,7 +49,7 @@ class InvoiceEndpoint implements InvoiceEndpointInterface
     }
 
     /**
-     * Gibt eine Rechnung anhand der ID zurück.
+     * Returns an invoice by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -62,7 +62,7 @@ class InvoiceEndpoint implements InvoiceEndpointInterface
     }
 
     /**
-     * Lädt die PDF-Datei einer Rechnung herunter und gibt die rohen Bytes zurück.
+     * Downloads the PDF file of an invoice and returns the raw bytes.
      *
      * @throws LexofficeException
      */

@@ -9,7 +9,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface DownPaymentInvoiceEndpointInterface
 {
     /**
-     * Gibt eine Abschlagsrechnung anhand der ID zurück.
+     * Returns a down payment invoice by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -17,7 +17,7 @@ interface DownPaymentInvoiceEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Lädt die PDF-Datei einer Abschlagsrechnung herunter und gibt die rohen Bytes zurück.
+     * Downloads the PDF file of a down payment invoice and returns the raw bytes.
      *
      * @throws LexofficeException
      */

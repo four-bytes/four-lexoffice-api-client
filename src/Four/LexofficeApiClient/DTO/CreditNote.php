@@ -80,7 +80,7 @@ readonly class CreditNote
     }
 
     /**
-     * Erstellt eine CreditNote-Instanz aus einer API-Response.
+     * Creates an instance of CreditNote from an API response.
      *
      * @param array<string, mixed> $data
      */

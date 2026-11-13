@@ -15,7 +15,7 @@ class PrintLayoutEndpoint implements PrintLayoutEndpointInterface
     }
 
     /**
-     * Gibt alle verfügbaren Print-Layouts zurück.
+     * Returns all available print layouts.
      *
      * @return array<mixed>
      * @throws LexofficeException

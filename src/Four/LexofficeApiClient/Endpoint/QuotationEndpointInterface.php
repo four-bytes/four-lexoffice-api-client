@@ -10,7 +10,7 @@ use Four\LexofficeApiClient\Exception\LexofficeException;
 interface QuotationEndpointInterface
 {
     /**
-     * Erstellt ein neues Angebot.
+     * Creates a new quotation.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -18,7 +18,7 @@ interface QuotationEndpointInterface
     public function create(Quotation $quotation, bool $finalize = false): array;
 
     /**
-     * Leitet einen bestehenden Voucher in ein neues Angebot über (Pursue).
+     * Converts an existing voucher into a new quotation (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -26,7 +26,7 @@ interface QuotationEndpointInterface
     public function pursue(string $precedingId, Quotation $quotation, bool $finalize = false): array;
 
     /**
-     * Gibt ein Angebot anhand der ID zurück.
+     * Returns a quotation by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -34,7 +34,7 @@ interface QuotationEndpointInterface
     public function get(string $id): array;
 
     /**
-     * Lädt die PDF-Datei eines Angebots herunter.
+     * Downloads the PDF file of a quotation.
      *
      * @throws LexofficeException
      */

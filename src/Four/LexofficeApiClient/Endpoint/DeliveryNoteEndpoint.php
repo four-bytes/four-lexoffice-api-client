@@ -16,7 +16,7 @@ class DeliveryNoteEndpoint implements DeliveryNoteEndpointInterface
     }
 
     /**
-     * Erstellt einen neuen Lieferschein.
+     * Creates a new delivery note.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -31,7 +31,7 @@ class DeliveryNoteEndpoint implements DeliveryNoteEndpointInterface
     }
 
     /**
-     * Gibt einen Lieferschein anhand der ID zurück.
+     * Returns a delivery note by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -44,7 +44,7 @@ class DeliveryNoteEndpoint implements DeliveryNoteEndpointInterface
     }
 
     /**
-     * Lädt die PDF-Datei eines Lieferscheins herunter.
+     * Downloads the PDF file of a delivery note.
      *
      * @throws LexofficeException
      */

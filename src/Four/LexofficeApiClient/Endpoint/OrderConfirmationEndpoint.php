@@ -16,7 +16,7 @@ class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
     }
 
     /**
-     * Erstellt eine neue Auftragsbestätigung.
+     * Creates a new order confirmation.
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -31,7 +31,7 @@ class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
     }
 
     /**
-     * Leitet einen bestehenden Voucher in eine neue Auftragsbestätigung über (Pursue).
+     * Converts an existing voucher into a new order confirmation (Pursue).
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexofficeException
@@ -49,7 +49,7 @@ class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
     }
 
     /**
-     * Gibt eine Auftragsbestätigung anhand der ID zurück.
+     * Returns an order confirmation by ID.
      *
      * @return array<string, mixed>
      * @throws LexofficeException
@@ -62,7 +62,7 @@ class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
     }
 
     /**
-     * Lädt die PDF-Datei einer Auftragsbestätigung herunter.
+     * Downloads the PDF file of an order confirmation.
      *
      * @throws LexofficeException
      */
