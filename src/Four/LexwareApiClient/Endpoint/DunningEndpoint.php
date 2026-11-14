@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Four\LexwareApiClient\Endpoint;
 
-use Four\LexwareApiClient\DTO\Dunning;
 use Four\LexwareApiClient\DTO\DownloadedFile;
+use Four\LexwareApiClient\DTO\Dunning;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\LexwareClient;
 

@@ -1,6 +1,7 @@
 # History
 
 ## Unreleased
+- **Note for implementers:** the seven sales voucher endpoint interfaces gain `downloadFile()`, and `DeliveryNoteEndpointInterface` gains `pursue()`. Custom implementations of these interfaces must add the methods (#20)
 - fix: `downloadPdf()` on all sales voucher endpoints now uses `GET /{type}/{id}/file`; the old `/document` endpoint is deprecated and returns JSON (`documentFileId`), not the PDF. Down payment invoices never had a `/document` endpoint (#20)
 - feat: `downloadFile(string $id, string $accept = '*/*'): DownloadedFile` on invoices, credit notes, delivery notes, down payment invoices, dunnings, order confirmations and quotations — returns content, `Content-Type` and the suggested file name; `application/xml` returns the XRechnung XML (#20)
 - feat: `LexwareClient::download()` and DTO `DownloadedFile`; `LexwareClient::downloadFile()` is deprecated (#20)

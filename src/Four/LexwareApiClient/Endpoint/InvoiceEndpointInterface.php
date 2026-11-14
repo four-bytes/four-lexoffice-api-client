@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Four\LexwareApiClient\Endpoint;
 
-use Four\LexwareApiClient\DTO\Invoice;
 use Four\LexwareApiClient\DTO\DownloadedFile;
+use Four\LexwareApiClient\DTO\Invoice;
 use Four\LexwareApiClient\Exception\LexwareException;
 
 interface InvoiceEndpointInterface
