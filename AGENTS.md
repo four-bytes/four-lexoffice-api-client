@@ -1,8 +1,7 @@
 # four-lexware-api-client
 
 PHP API client for the Lexware Office API v1. The API was formerly branded
-"lexoffice" and was rebranded to Lexware on 2025-05-26; only the docs site still
-uses the old domain (`developers.lexoffice.io`).
+"lexoffice" and was rebranded to Lexware on 2025-05-26.
 
 ## Language
 English — code, docs, issues, PRs and commits are written in English.
@@ -21,7 +20,7 @@ English — code, docs, issues, PRs and commits are written in English.
 - Base URL: https://api.lexware.io/v1/
 - Auth: Bearer Token
 - Rate Limit: 2 req/s (client throttles to 1 req/s for headroom)
-- Docs: https://developers.lexoffice.io/docs/
+- Docs: https://developers.lexware.io/docs/ (source of truth for implementation, tests and mocks)
 
 ## Key paths
 - Client: src/Four/LexwareApiClient/LexwareClient.php
