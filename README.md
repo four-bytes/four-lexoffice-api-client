@@ -344,7 +344,7 @@ The deprecated `GET /{type}/{id}/document` endpoints are intentionally not used.
 | `CATEGORY_REVENUE` | `8f8664a1-fd86-11e1-a21f-0800200c9a66` | Other revenue |
 | `CATEGORY_SERVICES` | `8f8664a0-fd86-11e1-a21f-0800200c9a66` | Services |
 | `CATEGORY_DISTANCE_SALES_EU` | `7c112b66-0565-479c-bc18-5845e080880a` | Distance sales within the EU |
-| `CATEGORY_DISTANCE_SALES_EU_TAXABLE` | `4ebd965a-7126-416c-9d8c-a5c9366ee473` | Distance sales within the EU (taxable) |
+| `CATEGORY_DISTANCE_SALES_EU_TAXABLE` | `4ebd965a-7126-416c-9d8c-a5c9366ee473` | Alias of `CATEGORY_EU_SALES` |
 | `CATEGORY_THIRD_COUNTRY_SERVICE` | `ef5b1a6e-f690-4004-9a19-91276348894f` | Services to third countries |
 | `CATEGORY_SMALL_BUSINESS` | `7a1efa0e-6283-4cbf-9583-8e88d3ba5960` | Small business |
 
