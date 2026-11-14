@@ -7,6 +7,7 @@ namespace Four\LexwareApiClient;
 use Four\Http\Configuration\ClientConfig;
 use Four\Http\Configuration\RetryConfig;
 use Four\Http\Factory\HttpClientFactory;
+use Four\LexwareApiClient\DTO\DownloadedFile;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\Exception\RateLimitException;
 use Four\RateLimit\RateLimitConfiguration;
@@ -141,25 +142,26 @@ class LexwareClient
     }
 
     /**
-     * Downloads a PDF from the API and returns the raw bytes.
+     * Downloads a binary file and returns its content with type and suggested file name.
      *
+     * @param string $accept Accept header; selects the representation (e.g. application/xml for XRechnung).
      * @throws LexwareException
      * @throws RateLimitException
      */
-    public function downloadFile(string $endpoint): string
+    public function download(string $endpoint, string $accept = '*/*'): DownloadedFile
     {
         $url = self::BASE_URL . ltrim($endpoint, '/');
 
         $request = $this->requestFactory->createRequest('GET', $url)
             ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
-            ->withHeader('Accept', 'application/pdf')
+            ->withHeader('Accept', $accept)
             ->withHeader('User-Agent', self::USER_AGENT);
 
         try {
             $response = $this->httpClient->sendRequest($request);
         } catch (ClientExceptionInterface $e) {
             throw new LexwareException(
-                message: 'PDF download failed: ' . $e->getMessage(),
+                message: 'File download failed: ' . $e->getMessage(),
                 httpStatusCode: 0,
             );
         }
@@ -172,13 +174,31 @@ class LexwareClient
 
         if ($statusCode < 200 || $statusCode >= 300) {
             throw new LexwareException(
-                message: sprintf('lexware API error %d for PDF download: %s', $statusCode, $endpoint),
+                message: sprintf('lexware API error %d for file download: %s', $statusCode, $endpoint),
                 httpStatusCode: $statusCode,
                 responseBody: (string) $response->getBody(),
             );
         }
 
-        return (string) $response->getBody();
+        $disposition = $response->getHeaderLine('Content-Disposition');
+
+        return new DownloadedFile(
+            content: (string) $response->getBody(),
+            contentType: $response->getHeaderLine('Content-Type'),
+            fileName: $disposition !== '' ? DownloadedFile::parseFileName($disposition) : null,
+        );
+    }
+
+    /**
+     * Downloads a file as PDF and returns the raw bytes.
+     *
+     * @deprecated Use download(), which also returns the content type and file name.
+     * @throws LexwareException
+     * @throws RateLimitException
+     */
+    public function downloadFile(string $endpoint): string
+    {
+        return $this->download($endpoint, 'application/pdf')->content;
     }
 
     /**

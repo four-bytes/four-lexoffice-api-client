@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Four\LexwareApiClient\Endpoint;
 
 use Four\LexwareApiClient\DTO\Invoice;
+use Four\LexwareApiClient\DTO\DownloadedFile;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\LexwareClient;
 
@@ -68,6 +69,17 @@ class InvoiceEndpoint implements InvoiceEndpointInterface
      */
     public function downloadPdf(string $id): string
     {
-        return $this->client->downloadFile('invoices/' . $id . '/document');
+        return $this->downloadFile($id, 'application/pdf')->content;
+    }
+
+    /**
+     * Downloads the document file of an invoice (GET /invoices/{id}/file).
+     *
+     * @param string $accept Accept header: the wildcard default, application/pdf or application/xml (XRechnung only)
+     * @throws LexwareException
+     */
+    public function downloadFile(string $id, string $accept = '*/*'): DownloadedFile
+    {
+        return $this->client->download('invoices/' . $id . '/file', $accept);
     }
 }

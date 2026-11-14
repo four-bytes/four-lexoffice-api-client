@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Four\LexwareApiClient\Endpoint;
 
 use Four\LexwareApiClient\DTO\OrderConfirmation;
+use Four\LexwareApiClient\DTO\DownloadedFile;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\LexwareClient;
 
@@ -62,12 +63,23 @@ class OrderConfirmationEndpoint implements OrderConfirmationEndpointInterface
     }
 
     /**
-     * Downloads the PDF file of an order confirmation.
+     * Downloads the PDF file of an order confirmation and returns the raw bytes.
      *
      * @throws LexwareException
      */
     public function downloadPdf(string $id): string
     {
-        return $this->client->downloadFile('order-confirmations/' . $id . '/document');
+        return $this->downloadFile($id, 'application/pdf')->content;
+    }
+
+    /**
+     * Downloads the document file of an order confirmation (GET /order-confirmations/{id}/file).
+     *
+     * @param string $accept Accept header: the wildcard default, application/pdf or application/xml (XRechnung only)
+     * @throws LexwareException
+     */
+    public function downloadFile(string $id, string $accept = '*/*'): DownloadedFile
+    {
+        return $this->client->download('order-confirmations/' . $id . '/file', $accept);
     }
 }

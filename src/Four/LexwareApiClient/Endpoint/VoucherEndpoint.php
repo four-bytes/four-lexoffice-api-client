@@ -60,4 +60,17 @@ class VoucherEndpoint implements VoucherEndpointInterface
         $result = $this->client->sendRequest('vouchers/' . $voucherId, $voucher->toApiArray(), 'PUT');
         return $result;
     }
+
+    /**
+     * Returns a page of vouchers whose voucherNumber equals the given value (GET /vouchers?voucherNumber=…).
+     *
+     * @return array<string, mixed>
+     * @throws LexwareException
+     */
+    public function findByNumber(string $voucherNumber): array
+    {
+        /** @var array<string, mixed> $result */
+        $result = $this->client->sendRequest('vouchers?' . http_build_query(['voucherNumber' => $voucherNumber]));
+        return $result;
+    }
 }

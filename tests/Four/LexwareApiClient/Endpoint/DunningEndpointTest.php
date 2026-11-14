@@ -114,7 +114,44 @@ class DunningEndpointTest extends TestCase
         self::assertSame($pdf, $this->endpoint->downloadPdf('d1'));
 
         $request = $this->lastRequest();
-        self::assertSame('/v1/dunnings/d1/document', $request->getUri()->getPath());
+        self::assertSame('/v1/dunnings/d1/file', $request->getUri()->getPath());
+        self::assertSame('application/pdf', $request->getHeaderLine('Accept'));
+    }
+
+    public function testDownloadFileReturnsContentTypeAndFileName(): void
+    {
+        $xml = '<?xml version="1.0"?><Invoice/>';
+        $this->mockHttpClient->addResponse(new Response(
+            200,
+            [
+                'Content-Type'        => 'application/xml',
+                'Content-Disposition' => 'attachment; filename="d1.xml"',
+            ],
+            $this->psr17Factory->createStream($xml),
+        ));
+
+        $file = $this->endpoint->downloadFile('d1', 'application/xml');
+
+        self::assertSame($xml, $file->content);
+        self::assertSame('application/xml', $file->contentType);
+        self::assertSame('d1.xml', $file->fileName);
+
+        $request = $this->lastRequest();
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/v1/dunnings/d1/file', $request->getUri()->getPath());
+        self::assertSame('application/xml', $request->getHeaderLine('Accept'));
+    }
+
+    public function testDownloadFileUsesWildcardAcceptByDefault(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(200, ['Content-Type' => 'application/pdf'], '%PDF'));
+
+        $file = $this->endpoint->downloadFile('d1');
+
+        self::assertSame('application/pdf', $file->contentType);
+        self::assertNull($file->fileName);
+        $request = $this->lastRequest();
+        self::assertSame('*/*', $request->getHeaderLine('Accept'));
     }
 
     private function dunning(): Dunning

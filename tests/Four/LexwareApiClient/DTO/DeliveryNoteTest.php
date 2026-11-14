@@ -116,4 +116,13 @@ class DeliveryNoteTest extends TestCase
         self::assertNull($note->remark);
         self::assertNull($note->shippingConditionsDate);
     }
+
+    public function testDeliveryTermsRoundTrip(): void
+    {
+        $note = new DeliveryNote(voucherDate: '2026-02-25', addressName: 'A', addressStreet: 'S', addressCity: 'C', addressZip: '1', addressCountryCode: 'DE', lineItems: [], deliveryTerms: 'Lieferung frei Haus.');
+
+        self::assertSame('Lieferung frei Haus.', $note->toApiArray()['deliveryTerms']);
+        self::assertSame('Lieferung frei Haus.', DeliveryNote::fromArray(['deliveryTerms' => 'Lieferung frei Haus.'])->deliveryTerms);
+        self::assertArrayNotHasKey('deliveryTerms', (new DeliveryNote(voucherDate: '2026-02-25', addressName: 'A', addressStreet: 'S', addressCity: 'C', addressZip: '1', addressCountryCode: 'DE', lineItems: []))->toApiArray());
+    }
 }

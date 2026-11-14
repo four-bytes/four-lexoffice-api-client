@@ -23,6 +23,7 @@ readonly class OrderConfirmation
         public readonly ?string $remark = null,
         public readonly ?string $paymentConditionId = null,
         public readonly ?string $shippingConditionsDate = null,
+        public readonly ?string $deliveryTerms = null,
     ) {
     }
 
@@ -74,6 +75,10 @@ readonly class OrderConfirmation
                 'shippingDate' => $this->shippingConditionsDate,
                 'shippingType' => 'delivery',
             ];
+        }
+
+        if ($this->deliveryTerms !== null) {
+            $data['deliveryTerms'] = $this->deliveryTerms;
         }
 
         return $data;

@@ -84,4 +84,12 @@ class OrderConfirmationTest extends TestCase
         self::assertArrayNotHasKey('paymentConditions', $data);
         self::assertArrayNotHasKey('shippingConditions', $data);
     }
+
+    public function testToApiArrayIncludesDeliveryTerms(): void
+    {
+        $oc = new OrderConfirmation(voucherDate: '2026-02-25', addressName: 'A', addressStreet: 'S', addressCity: 'C', addressZip: '1', addressCountryCode: 'DE', lineItems: [], deliveryTerms: 'Lieferung an die angegebene Lieferadresse');
+
+        self::assertSame('Lieferung an die angegebene Lieferadresse', $oc->toApiArray()['deliveryTerms']);
+        self::assertArrayNotHasKey('deliveryTerms', (new OrderConfirmation(voucherDate: '2026-02-25', addressName: 'A', addressStreet: 'S', addressCity: 'C', addressZip: '1', addressCountryCode: 'DE', lineItems: []))->toApiArray());
+    }
 }

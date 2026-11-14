@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Four\LexwareApiClient\Endpoint;
 
 use Four\LexwareApiClient\DTO\CreditNote;
+use Four\LexwareApiClient\DTO\DownloadedFile;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\LexwareClient;
 
@@ -62,12 +63,23 @@ class CreditNoteEndpoint implements CreditNoteEndpointInterface
     }
 
     /**
-     * Downloads the PDF file of a credit note.
+     * Downloads the PDF file of a credit note and returns the raw bytes.
      *
      * @throws LexwareException
      */
     public function downloadPdf(string $id): string
     {
-        return $this->client->downloadFile('credit-notes/' . $id . '/document');
+        return $this->downloadFile($id, 'application/pdf')->content;
+    }
+
+    /**
+     * Downloads the document file of a credit note (GET /credit-notes/{id}/file).
+     *
+     * @param string $accept Accept header: the wildcard default, application/pdf or application/xml (XRechnung only)
+     * @throws LexwareException
+     */
+    public function downloadFile(string $id, string $accept = '*/*'): DownloadedFile
+    {
+        return $this->client->download('credit-notes/' . $id . '/file', $accept);
     }
 }

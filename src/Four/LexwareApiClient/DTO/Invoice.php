@@ -30,6 +30,10 @@ readonly class Invoice
         public readonly ?array $xRechnung = null,
         public readonly ?string $printLayoutId = null,
         public readonly ?string $addressSupplement = null,
+        /** Read-only: NONE, EN16931 (ZUGFeRD) or XRechnung. Never sent to the API. */
+        public readonly ?string $electronicDocumentProfile = null,
+        /** Read-only: true for a closing invoice (Schlussrechnung). Never sent to the API. */
+        public readonly ?bool $closingInvoice = null,
     ) {
     }
 
@@ -136,6 +140,8 @@ readonly class Invoice
             xRechnung: $data['xRechnung'] ?? null,
             printLayoutId: $data['printLayoutId'] ?? null,
             addressSupplement: $address['supplement'] ?? null,
+            electronicDocumentProfile: $data['electronicDocumentProfile'] ?? null,
+            closingInvoice: $data['closingInvoice'] ?? null,
         );
     }
 }

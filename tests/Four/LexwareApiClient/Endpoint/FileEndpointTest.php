@@ -106,6 +106,42 @@ class FileEndpointTest extends TestCase
         $this->endpoint->uploadIncoming($this->createTempFile());
     }
 
+    public function testDownloadReturnsBookkeepingVoucherFile(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(
+            200,
+            ['Content-Type' => 'image/png', 'Content-Disposition' => 'attachment; filename="beleg.png"'],
+            'PNGDATA',
+        ));
+
+        $file = $this->endpoint->download('f1', 'image/png');
+
+        self::assertSame('PNGDATA', $file->content);
+        self::assertSame('image/png', $file->contentType);
+        self::assertSame('beleg.png', $file->fileName);
+
+        $request = $this->lastRequest();
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/v1/files/f1', $request->getUri()->getPath());
+        self::assertSame('image/png', $request->getHeaderLine('Accept'));
+    }
+
+    public function testDownloadThrowsRateLimitExceptionOn429(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(429));
+
+        $this->expectException(\Four\LexwareApiClient\Exception\RateLimitException::class);
+        $this->endpoint->download('f1');
+    }
+
+    public function testDownloadThrowsOn406(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(406));
+
+        $this->expectException(LexwareException::class);
+        $this->endpoint->download('f1', 'text/plain');
+    }
+
     private function createTempFile(): string
     {
         $filePath = tempnam(sys_get_temp_dir(), 'lexware-test-');

@@ -215,7 +215,7 @@ class LexwareClientTest extends TestCase
             self::fail('Expected LexwareException');
         } catch (LexwareException $e) {
             self::assertSame(0, $e->getHttpStatusCode());
-            self::assertStringContainsString('PDF download failed', $e->getMessage());
+            self::assertStringContainsString('File download failed', $e->getMessage());
         }
     }
 
