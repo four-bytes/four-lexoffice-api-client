@@ -1,12 +1,14 @@
-# four-lexoffice-api-client
+# four-lexware-api-client
 
-PHP client for the [lexoffice / Lexware Office API v1](https://developers.lexoffice.io/docs/).
+PHP client for the [Lexware Office API v1](https://developers.lexoffice.io/docs/).
+
+> **Note:** the API was formerly branded "lexoffice" and has been rebranded to Lexware on 2025-05-26. The API host is `api.lexware.io`; only the docs site still lives under `developers.lexoffice.io`.
 
 Full support for all 20 endpoints: Articles, Contacts, Invoices, CreditNotes, DeliveryNotes, Quotations, OrderConfirmations, Dunning, DownPaymentInvoices, Payments, EventSubscriptions, Vouchers, Files, Voucherlist plus the lookup endpoints.
 
 Built on `four-bytes/four-http-client` (PSR-18). Rate limiting and retries are handled by middleware — no direct cURL dependency.
 
-> **Disclaimer:** This is an unofficial, community-maintained client. It is not affiliated with, endorsed by, or sponsored by Lexware GmbH & Co. KG or lexoffice.
+> **Disclaimer:** This is an unofficial, community-maintained client. It is not affiliated with, endorsed by, or sponsored by Lexware GmbH & Co. KG or Lexware Office.
 
 **API base URL:** `https://api.lexware.io/v1/`
 
@@ -19,7 +21,7 @@ Built on `four-bytes/four-http-client` (PSR-18). Rate limiting and retries are h
 ## Installation
 
 ```bash
-composer require four-bytes/four-lexoffice-api-client
+composer require four-bytes/four-lexware-api-client
 ```
 
 ---
@@ -55,13 +57,13 @@ composer require four-bytes/four-lexoffice-api-client
 ## Initializing the client
 
 ```php
-use Four\LexofficeApiClient\LexofficeClient;
+use Four\LexwareApiClient\LexwareClient;
 
 // Recommended: static factory (a PSR-18 client is wired up automatically)
-$client = LexofficeClient::create('your-api-key');
+$client = LexwareClient::create('your-api-key');
 
 // Alternative: constructor with DI (e.g. for tests)
-$client = new LexofficeClient(
+$client = new LexwareClient(
     apiKey: 'your-api-key',
     httpClient: $psrClient,
     requestFactory: $requestFactory,
@@ -72,11 +74,11 @@ $client = new LexofficeClient(
 ### Registering endpoints
 
 ```php
-use Four\LexofficeApiClient\Endpoint\ContactEndpoint;
-use Four\LexofficeApiClient\Endpoint\InvoiceEndpoint;
-use Four\LexofficeApiClient\Endpoint\VoucherEndpoint;
-use Four\LexofficeApiClient\Endpoint\FileEndpoint;
-use Four\LexofficeApiClient\Endpoint\EventSubscriptionEndpoint;
+use Four\LexwareApiClient\Endpoint\ContactEndpoint;
+use Four\LexwareApiClient\Endpoint\InvoiceEndpoint;
+use Four\LexwareApiClient\Endpoint\VoucherEndpoint;
+use Four\LexwareApiClient\Endpoint\FileEndpoint;
+use Four\LexwareApiClient\Endpoint\EventSubscriptionEndpoint;
 
 // All endpoints
 $contacts    = new ContactEndpoint($client);
@@ -101,9 +103,9 @@ $vouchers = $client->vouchers();
 ### Create a contact (person)
 
 ```php
-use Four\LexofficeApiClient\DTO\Contact;
-use Four\LexofficeApiClient\DTO\ContactAddress;
-use Four\LexofficeApiClient\DTO\ContactPerson;
+use Four\LexwareApiClient\DTO\Contact;
+use Four\LexwareApiClient\DTO\ContactAddress;
+use Four\LexwareApiClient\DTO\ContactPerson;
 
 $contact = new Contact(
     person: new ContactPerson(
@@ -127,9 +129,9 @@ $contactId = $contacts->create($contact);
 ### Create a contact (company/vendor)
 
 ```php
-use Four\LexofficeApiClient\DTO\Contact;
-use Four\LexofficeApiClient\DTO\ContactAddress;
-use Four\LexofficeApiClient\DTO\ContactCompany;
+use Four\LexwareApiClient\DTO\Contact;
+use Four\LexwareApiClient\DTO\ContactAddress;
+use Four\LexwareApiClient\DTO\ContactCompany;
 
 $contact = new Contact(
     isVendor: true, // company is also a vendor
@@ -160,8 +162,8 @@ $contactId = $contacts->upsert($contact, existingId: $existingId);
 ### Create an invoice
 
 ```php
-use Four\LexofficeApiClient\DTO\Invoice;
-use Four\LexofficeApiClient\DTO\InvoiceLineItem;
+use Four\LexwareApiClient\DTO\Invoice;
+use Four\LexwareApiClient\DTO\InvoiceLineItem;
 
 $lineItem = new InvoiceLineItem(
     name: 'Product XYZ',
@@ -192,8 +194,8 @@ $invoiceId = $invoice['id'];
 ### Create a voucher (legacy way for accounting vouchers)
 
 ```php
-use Four\LexofficeApiClient\DTO\Voucher;
-use Four\LexofficeApiClient\DTO\VoucherItem;
+use Four\LexwareApiClient\DTO\Voucher;
+use Four\LexwareApiClient\DTO\VoucherItem;
 
 $item = new VoucherItem(
     amount: 29.90,
@@ -244,10 +246,10 @@ file_put_contents('/path/to/output.pdf', $pdfContent);
 ### Register a webhook
 
 ```php
-use Four\LexofficeApiClient\DTO\EventSubscription;
+use Four\LexwareApiClient\DTO\EventSubscription;
 
 $subscription = new EventSubscription(
-    callbackUrl: 'https://my-domain.com/webhook/lexoffice',
+    callbackUrl: 'https://my-domain.com/webhook/lexware',
     eventTypes: ['invoice.created'],
     active: true,
 );
@@ -266,7 +268,7 @@ $webhooks->delete($webhookId);
 
 ## Deeplinks
 
-`deeplinkUrl()` builds a link to a resource in the lexoffice web app, so you can jump from your own application straight to the matching record:
+`deeplinkUrl()` builds a link to a resource in the Lexware Office web app, so you can jump from your own application straight to the matching record:
 
 ```php
 // https://app.lexware.de/permalink/contacts/view/<id>
@@ -302,15 +304,15 @@ The first argument is the resource type, the second is the resource id.
 ## Error handling
 
 ```php
-use Four\LexofficeApiClient\Exception\LexofficeException;
-use Four\LexofficeApiClient\Exception\RateLimitException;
+use Four\LexwareApiClient\Exception\LexwareException;
+use Four\LexwareApiClient\Exception\RateLimitException;
 
 try {
     $invoices->create($invoice);
 } catch (RateLimitException $e) {
     // Still HTTP 429 after 3 retries
     echo 'Rate limit exceeded: ' . $e->getMessage();
-} catch (LexofficeException $e) {
+} catch (LexwareException $e) {
     echo 'API error ' . $e->getHttpStatusCode() . ': ' . $e->getMessage();
     echo 'Response: ' . $e->getResponseBody();
 }
