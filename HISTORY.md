@@ -1,6 +1,6 @@
 # History
 
-## Unreleased
+## 1.2.0 — 2026-11-14
 - refactor: `VoucherItem::CATEGORY_DISTANCE_SALES_EU_TAXABLE` is now an explicit alias of `CATEGORY_EU_SALES` (same UUID as before); comments in English (#40)
 - **Breaking (signature):** `dunnings()->create(Dunning $dunning, string $precedingSalesVoucherId)` — the invoice id is mandatory per API docs ("Create a dunning") and is sent as query parameter. The old `create(Dunning, bool $finalize)` sent `POST /dunnings` without it, which is not a documented API call; callers passing `true` now get a `TypeError` (#39)
 - deprecated: `$finalize` on `dunnings()->pursue()` and `orderConfirmations()->pursue()`, and `quotations()->pursue()` — not documented by the API, removal in 2.0 (#39)
