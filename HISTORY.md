@@ -1,7 +1,7 @@
 # History
 
 ## Unreleased
-- fix: `dunnings()->create(Dunning $dunning, string $precedingSalesVoucherId)` — the invoice id is mandatory per API docs and is sent as query parameter; the old call without it (and with `finalize`) was not a documented API call and could not succeed (#39)
+- **Breaking (signature):** `dunnings()->create(Dunning $dunning, string $precedingSalesVoucherId)` — the invoice id is mandatory per API docs ("Create a dunning") and is sent as query parameter. The old `create(Dunning, bool $finalize)` sent `POST /dunnings` without it, which is not a documented API call; callers passing `true` now get a `TypeError` (#39)
 - deprecated: `$finalize` on `dunnings()->pursue()` and `orderConfirmations()->pursue()`, and `quotations()->pursue()` — not documented by the API, removal in 2.0 (#39)
 
 ## 1.1.0 — 2026-11-14
