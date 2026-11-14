@@ -22,7 +22,7 @@ class LexwareClient
 {
     private const BASE_URL = 'https://api.lexware.io/v1/';
     private const APP_URL = 'https://app.lexware.de';
-    private const USER_AGENT = 'four-lexware-api-client/1.2.0';
+    private const USER_AGENT = 'four-lexware-api-client/1.2.1';
 
     public function __construct(
         private readonly string $apiKey,

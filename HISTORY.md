@@ -1,5 +1,8 @@
 # History
 
+## 1.2.1 — 2026-11-14
+- chore(deps): `four-bytes/four-http-client` `^4.0 || ^5.0` — installable together with packages that need v5; tests pass against v4.2.1 and v5.0.1 (#45)
+
 ## 1.2.0 — 2026-11-14
 - refactor: `VoucherItem::CATEGORY_DISTANCE_SALES_EU_TAXABLE` is now an explicit alias of `CATEGORY_EU_SALES` (same UUID as before); comments in English (#40)
 - **Breaking (signature):** `dunnings()->create(Dunning $dunning, string $precedingSalesVoucherId)` — the invoice id is mandatory per API docs ("Create a dunning") and is sent as query parameter. The old `create(Dunning, bool $finalize)` sent `POST /dunnings` without it, which is not a documented API call; callers passing `true` now get a `TypeError` (#39)
