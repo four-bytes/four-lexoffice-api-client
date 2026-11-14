@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving `four-lexoffice-api-client`.
+Thanks for your interest in improving `four-lexware-api-client`.
 
 ## Reporting issues
 
@@ -21,7 +21,7 @@ Thanks for your interest in improving `four-lexoffice-api-client`.
 
 - Follow [PSR-12](https://www.php-fig.org/psr/psr-12/).
 - Every PHP file starts with `declare(strict_types=1);`.
-- Use PSR-4 autoloading under `Four\LexofficeApiClient\`.
+- Use PSR-4 autoloading under `Four\LexwareApiClient\`.
 - Keep the public API stable; treat breaking changes as a major version bump.
 - Write code, comments, commit messages, and documentation in English.
 

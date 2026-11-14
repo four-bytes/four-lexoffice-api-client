@@ -5,7 +5,7 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="four-lexoffice-api-client">
+        <testsuite name="four-lexware-api-client">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

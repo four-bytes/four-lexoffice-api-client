@@ -1,5 +1,8 @@
 # History
 
+## Unreleased
+- Renamed the package and namespace from "lexoffice" to the current Lexware brand: `four-bytes/four-lexware-api-client`, `Four\LexwareApiClient\`, `LexwareClient`, `LexwareException` (the API was rebranded to Lexware on 2025-05-26)
+
 ## 0.5.1 — 2026-02-27
 - fix: `taxRatePercent` as float (was int) — now supports fractional tax rates such as 25.5% (Finland, Denmark)
 
@@ -8,7 +11,7 @@
 - New DTOs: ContactCompany, ContactPerson
 - ContactAddress: added `fromArray()`
 - Contact: `isCustomer`/`isVendor` instead of `isCompany`/`isVendor`, `company`/`person` objects, `billingAddresses[]`, `emailsBusiness/Office/Private/Other[]`, `phonesBusiness/Office/Mobile/Private/Fax/Other[]`, `xRechnungBuyerReference`, `xRechnungVendorNumber`, `fromArray()`
-- LexofficeClient: 20 endpoint factory methods (`contacts()`, `invoices()`, `articles()`, etc.)
+- LexwareClient: 20 endpoint factory methods (`contacts()`, `invoices()`, `articles()`, etc.)
 - Tests: 61 tests, 207 assertions (all green)
 
 ## 0.4.0 — 2026-02-26
@@ -20,16 +23,16 @@
 
 ## 0.3.0 — 2026-02-26
 - Replaced raw cURL transport with the PSR-18 HTTP client interface
-- Added `LexofficeClient::create(string $apiKey)` static factory using four-http-client
+- Added `LexwareClient::create(string $apiKey)` static factory using four-http-client
 - Rate limiting (1 req/s) is now handled by four-rate-limiting middleware
 - Retry logic (3x on 429) is now handled by four-http-client RetryMiddleware
 - Removed the `ext-curl` dependency
 - Added `four-bytes/four-http-client ^4.0` and `four-bytes/four-rate-limiting ^1.3`
-- Added PHPUnit 11 tests for the LexofficeClient transport layer
+- Added PHPUnit 11 tests for the LexwareClient transport layer
 
 ## 0.2.0 — 2026-02-25
-- LexofficeClient: fixed BASE_URL to api.lexware.io (was lexoffice.io)
-- LexofficeClient: `downloadFile()` for PDF downloads (Accept: application/pdf, raw bytes)
+- LexwareClient: fixed BASE_URL to the Lexware API host `api.lexware.io`
+- LexwareClient: `downloadFile()` for PDF downloads (Accept: application/pdf, raw bytes)
 - DTO: PagedResponse (generic paging with fromArray)
 - DTO: Article + ArticlePrice (PRODUCT|SERVICE, toApiArray)
 - DTO: InvoiceLineItem (custom|material|service|text, unitPrice structure)
@@ -53,8 +56,8 @@
 
 ## 0.1.0 — 2026-02-25
 - Initial release
-- LexofficeClient: HTTP client with rate limiting (1 req/s) + retry (3x on 429)
+- LexwareClient: HTTP client with rate limiting (1 req/s) + retry (3x on 429)
 - DTOs: Contact, Voucher, VoucherItem, FileUpload
 - Endpoints: ContactEndpoint, VoucherEndpoint, FileEndpoint
-- Exceptions: LexofficeException, RateLimitException
+- Exceptions: LexwareException, RateLimitException
 - Ported from an internal legacy codebase

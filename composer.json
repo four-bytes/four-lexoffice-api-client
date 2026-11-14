@@ -1,10 +1,9 @@
 {
-    "name": "four-bytes/four-lexoffice-api-client",
-    "description": "PHP client for the lexoffice/Lexware Office API v1",
+    "name": "four-bytes/four-lexware-api-client",
+    "description": "PHP client for the Lexware Office API v1",
     "type": "library",
     "license": "Apache-2.0",
     "keywords": [
-        "lexoffice",
         "lexware",
         "accounting",
         "api-client",
@@ -17,8 +16,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/four-bytes/four-lexoffice-api-client/issues",
-        "source": "https://github.com/four-bytes/four-lexoffice-api-client"
+        "issues": "https://github.com/four-bytes/four-lexware-api-client/issues",
+        "source": "https://github.com/four-bytes/four-lexware-api-client"
     },
     "require": {
         "php": "^8.4",
@@ -41,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Four\\LexofficeApiClient\\": "src/Four/LexofficeApiClient/"
+            "Four\\LexwareApiClient\\": "src/Four/LexwareApiClient/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Four\\LexofficeApiClient\\Tests\\": "tests/"
+            "Four\\LexwareApiClient\\Tests\\": "tests/"
         }
     },
     "scripts": {
