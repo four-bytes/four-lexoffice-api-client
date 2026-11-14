@@ -21,6 +21,7 @@ interface OrderConfirmationEndpointInterface
     /**
      * Converts an existing voucher into a new order confirmation (Pursue).
      *
+     * @param bool $finalize Deprecated: not documented for pursuing to order confirmations; will be removed in 2.0.
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexwareException
      */

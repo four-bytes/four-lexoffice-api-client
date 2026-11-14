@@ -33,29 +33,18 @@ class DunningEndpointTest extends TestCase
         $this->endpoint = new DunningEndpoint($client);
     }
 
-    public function testCreateReturnsId(): void
+    public function testCreateSendsMandatoryPrecedingVoucherId(): void
     {
         $this->addJsonResponse(201, '{"id":"d1","resourceUri":"/v1/dunnings/d1","version":1}');
 
-        $result = $this->endpoint->create($this->dunning());
+        $result = $this->endpoint->create($this->dunning(), 'i1');
 
         self::assertSame('d1', $result['id']);
-        self::assertSame(1, $result['version']);
 
         $request = $this->lastRequest();
         self::assertSame('POST', $request->getMethod());
         self::assertSame('/v1/dunnings', $request->getUri()->getPath());
-        self::assertSame('', $request->getUri()->getQuery());
-    }
-
-    public function testCreateWithFinalizeAddsQueryParameter(): void
-    {
-        $this->addJsonResponse(201, '{"id":"d1"}');
-
-        $this->endpoint->create($this->dunning(), true);
-
-        $request = $this->lastRequest();
-        self::assertSame('finalize=true', $request->getUri()->getQuery());
+        self::assertSame('precedingSalesVoucherId=i1', $request->getUri()->getQuery());
     }
 
     public function testPursueBuildsPrecedingVoucherQuery(): void

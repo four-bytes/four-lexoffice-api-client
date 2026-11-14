@@ -36,6 +36,7 @@ class QuotationEndpoint implements QuotationEndpointInterface
      *
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexwareException
+     * @deprecated The API documents no pursue action to quotations; will be removed in 2.0.
      */
     public function pursue(string $precedingId, Quotation $quotation, bool $finalize = false): array
     {

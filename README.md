@@ -294,7 +294,7 @@ Every operation documented at [developers.lexware.io/docs](https://developers.le
 | `GET /delivery-notes/{id}/file` | `deliveryNotes()->downloadFile()`, `downloadPdf()` |
 | `GET /down-payment-invoices/{id}` | `downPaymentInvoices()->get()` |
 | `GET /down-payment-invoices/{id}/file` | `downPaymentInvoices()->downloadFile()`, `downloadPdf()` |
-| `POST /dunnings?precedingSalesVoucherId` | `dunnings()->pursue()` |
+| `POST /dunnings?precedingSalesVoucherId` | `dunnings()->create()`, `pursue()` |
 | `GET /dunnings/{id}` | `dunnings()->get()` |
 | `GET /dunnings/{id}/file` | `dunnings()->downloadFile()`, `downloadPdf()` |
 | `POST /event-subscriptions` | `eventSubscriptions()->create()` |

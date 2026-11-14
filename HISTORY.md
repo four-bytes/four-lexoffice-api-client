@@ -1,5 +1,9 @@
 # History
 
+## Unreleased
+- fix: `dunnings()->create(Dunning $dunning, string $precedingSalesVoucherId)` — the invoice id is mandatory per API docs and is sent as query parameter; the old call without it (and with `finalize`) was not a documented API call and could not succeed (#39)
+- deprecated: `$finalize` on `dunnings()->pursue()` and `orderConfirmations()->pursue()`, and `quotations()->pursue()` — not documented by the API, removal in 2.0 (#39)
+
 ## 1.1.0 — 2026-11-14
 - chore: `.gitattributes` — LF line endings, dev and community files excluded from the Composer dist archive (#21)
 - docs: README follows the Four Bytes standard — badges, requirements, quick start, API coverage table (documented operation → client method), `/file` download examples, testing, related packages, contributing/security/changelog links; docs link points to `developers.lexware.io` (#22)

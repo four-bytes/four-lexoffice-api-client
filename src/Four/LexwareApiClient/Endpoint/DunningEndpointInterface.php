@@ -11,16 +11,20 @@ use Four\LexwareApiClient\Exception\LexwareException;
 interface DunningEndpointInterface
 {
     /**
-     * Creates a new dunning notice (draft or directly finalized).
+     * Creates a dunning for an invoice or down payment invoice (POST /dunnings?precedingSalesVoucherId={id}).
      *
+     * Dunnings are always created as drafts.
+     *
+     * @param string $precedingSalesVoucherId ID of the invoice to be dunned (mandatory per API docs)
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexwareException
      */
-    public function create(Dunning $dunning, bool $finalize = false): array;
+    public function create(Dunning $dunning, string $precedingSalesVoucherId): array;
 
     /**
-     * Converts an existing voucher into a new dunning notice (Pursue).
+     * Pursues an invoice to a new dunning — same API call as create().
      *
+     * @param bool $finalize Deprecated: not documented for dunnings (always created as drafts); will be removed in 2.0.
      * @return array<string, mixed>  {id, resourceUri, version}
      * @throws LexwareException
      */
