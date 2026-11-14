@@ -1,13 +1,16 @@
 {
     "name": "four-bytes/four-lexware-api-client",
-    "description": "PHP client for the Lexware Office API v1",
+    "description": "PHP 8.4+ client for the Lexware Office API (formerly Lexoffice) with rate limiting and retry",
     "type": "library",
     "license": "Apache-2.0",
     "keywords": [
         "lexware",
+        "lexware-office",
+        "lexoffice",
         "accounting",
+        "invoicing",
         "api-client",
-        "invoicing"
+        "php"
     ],
     "authors": [
         {
