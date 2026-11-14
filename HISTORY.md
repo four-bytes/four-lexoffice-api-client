@@ -1,5 +1,8 @@
 # History
 
+## Unreleased
+- chore(deps): `.github/dependabot.yml` — weekly Composer and GitHub Actions updates, minor/patch grouped (#23)
+
 ## 1.0.2 — 2026-11-14
 - docs: `LICENSE` is now the unmodified Apache-2.0 text; copyright notice moved to new `NOTICE` (rights holder Four Flames GmbH & Co. KG)
 
