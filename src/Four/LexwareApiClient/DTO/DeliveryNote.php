@@ -21,6 +21,7 @@ readonly class DeliveryNote
         public readonly ?string $introduction = null,
         public readonly ?string $remark = null,
         public readonly ?string $shippingConditionsDate = null,
+        public readonly ?string $deliveryTerms = null,
     ) {
     }
 
@@ -63,6 +64,10 @@ readonly class DeliveryNote
             ];
         }
 
+        if ($this->deliveryTerms !== null) {
+            $data['deliveryTerms'] = $this->deliveryTerms;
+        }
+
         return $data;
     }
 
@@ -91,6 +96,7 @@ readonly class DeliveryNote
             introduction:            $data['introduction'] ?? null,
             remark:                  $data['remark'] ?? null,
             shippingConditionsDate:  $data['shippingConditions']['shippingDate'] ?? null,
+            deliveryTerms:           $data['deliveryTerms'] ?? null,
         );
     }
 }

@@ -44,7 +44,7 @@ class RecurringTemplateEndpointTest extends TestCase
         $request = $this->lastRequest();
         self::assertSame('GET', $request->getMethod());
         self::assertSame('/v1/recurring-templates', $request->getUri()->getPath());
-        self::assertSame('page=3', $request->getUri()->getQuery());
+        self::assertSame('page=3&size=25', $request->getUri()->getQuery());
     }
 
     public function testListUsesPageZeroByDefault(): void
@@ -54,7 +54,7 @@ class RecurringTemplateEndpointTest extends TestCase
         $this->endpoint->list();
 
         $request = $this->lastRequest();
-        self::assertSame('page=0', $request->getUri()->getQuery());
+        self::assertSame('page=0&size=25', $request->getUri()->getQuery());
     }
 
     public function testListThrowsOnError(): void
@@ -63,6 +63,37 @@ class RecurringTemplateEndpointTest extends TestCase
 
         $this->expectException(LexwareException::class);
         $this->endpoint->list();
+    }
+
+    public function testListPassesSizeAndSort(): void
+    {
+        $this->addJsonResponse(200, '{"content":[],"number":0,"size":1}');
+
+        $this->endpoint->list(0, 1, 'nextExecutionDate,ASC');
+
+        $request = $this->lastRequest();
+        self::assertSame('page=0&size=1&sort=nextExecutionDate%2CASC', $request->getUri()->getQuery());
+    }
+
+    public function testGetReturnsTemplate(): void
+    {
+        $this->addJsonResponse(200, '{"id":"rt1","recurringTemplateSettings":{"frequency":"MONTHLY"}}');
+
+        $result = $this->endpoint->get('rt1');
+
+        self::assertSame('rt1', $result['id']);
+
+        $request = $this->lastRequest();
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/v1/recurring-templates/rt1', $request->getUri()->getPath());
+    }
+
+    public function testGetThrowsOn404(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(404));
+
+        $this->expectException(LexwareException::class);
+        $this->endpoint->get('missing');
     }
 
     private function addJsonResponse(int $status, string $json): void

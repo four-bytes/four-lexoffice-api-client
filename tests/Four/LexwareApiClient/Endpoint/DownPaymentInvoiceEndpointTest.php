@@ -59,5 +59,48 @@ class DownPaymentInvoiceEndpointTest extends TestCase
         $result = $this->endpoint->downloadPdf('dp123');
 
         $this->assertSame($pdfBytes, $result);
+
+        $request = $this->mockHttpClient->getLastRequest();
+        self::assertNotFalse($request);
+        self::assertSame('/v1/down-payment-invoices/dp123/file', $request->getUri()->getPath());
+        self::assertSame('application/pdf', $request->getHeaderLine('Accept'));
+    }
+
+    public function testDownloadFileReturnsContentTypeAndFileName(): void
+    {
+        $xml = '<?xml version="1.0"?><Invoice/>';
+        $this->mockHttpClient->addResponse(new Response(
+            200,
+            [
+                'Content-Type'        => 'application/xml',
+                'Content-Disposition' => 'attachment; filename="dp123.xml"',
+            ],
+            $this->psr17Factory->createStream($xml),
+        ));
+
+        $file = $this->endpoint->downloadFile('dp123', 'application/xml');
+
+        self::assertSame($xml, $file->content);
+        self::assertSame('application/xml', $file->contentType);
+        self::assertSame('dp123.xml', $file->fileName);
+
+        $request = $this->mockHttpClient->getLastRequest();
+        self::assertNotFalse($request);
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/v1/down-payment-invoices/dp123/file', $request->getUri()->getPath());
+        self::assertSame('application/xml', $request->getHeaderLine('Accept'));
+    }
+
+    public function testDownloadFileUsesWildcardAcceptByDefault(): void
+    {
+        $this->mockHttpClient->addResponse(new Response(200, ['Content-Type' => 'application/pdf'], '%PDF'));
+
+        $file = $this->endpoint->downloadFile('dp123');
+
+        self::assertSame('application/pdf', $file->contentType);
+        self::assertNull($file->fileName);
+        $request = $this->mockHttpClient->getLastRequest();
+        self::assertNotFalse($request);
+        self::assertSame('*/*', $request->getHeaderLine('Accept'));
     }
 }

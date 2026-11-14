@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Four\LexwareApiClient\Endpoint;
 
+use Four\LexwareApiClient\DTO\DownloadedFile;
 use Four\LexwareApiClient\DTO\Quotation;
 use Four\LexwareApiClient\Exception\LexwareException;
 use Four\LexwareApiClient\LexwareClient;
@@ -62,12 +63,23 @@ class QuotationEndpoint implements QuotationEndpointInterface
     }
 
     /**
-     * Downloads the PDF file of a quotation.
+     * Downloads the PDF file of a quotation and returns the raw bytes.
      *
      * @throws LexwareException
      */
     public function downloadPdf(string $id): string
     {
-        return $this->client->downloadFile('quotations/' . $id . '/document');
+        return $this->downloadFile($id, 'application/pdf')->content;
+    }
+
+    /**
+     * Downloads the document file of a quotation (GET /quotations/{id}/file).
+     *
+     * @param string $accept Accept header: the wildcard default, application/pdf or application/xml (XRechnung only)
+     * @throws LexwareException
+     */
+    public function downloadFile(string $id, string $accept = '*/*'): DownloadedFile
+    {
+        return $this->client->download('quotations/' . $id . '/file', $accept);
     }
 }

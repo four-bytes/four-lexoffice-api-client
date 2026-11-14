@@ -181,4 +181,30 @@ class InvoiceTest extends TestCase
         self::assertNull($invoice->printLayoutId);
         self::assertNull($invoice->addressSupplement);
     }
+
+    public function testFromArrayParsesReadOnlyEInvoiceFields(): void
+    {
+        $invoice = Invoice::fromArray([
+            'electronicDocumentProfile' => 'XRechnung',
+            'closingInvoice'            => true,
+            'xRechnung'                 => ['buyerReference' => '04011000-1234512345-35'],
+        ]);
+
+        self::assertSame('XRechnung', $invoice->electronicDocumentProfile);
+        self::assertTrue($invoice->closingInvoice);
+        self::assertSame(['buyerReference' => '04011000-1234512345-35'], $invoice->xRechnung);
+
+        $data = $invoice->toApiArray();
+        self::assertArrayNotHasKey('electronicDocumentProfile', $data);
+        self::assertArrayNotHasKey('closingInvoice', $data);
+        self::assertSame(['buyerReference' => '04011000-1234512345-35'], $data['xRechnung']);
+    }
+
+    public function testFromArrayReadOnlyFieldsDefaultToNull(): void
+    {
+        $invoice = Invoice::fromArray([]);
+
+        self::assertNull($invoice->electronicDocumentProfile);
+        self::assertNull($invoice->closingInvoice);
+    }
 }

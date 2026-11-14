@@ -31,4 +31,12 @@ interface VoucherEndpointInterface
      * @throws LexwareException
      */
     public function update(string $voucherId, Voucher $voucher): array;
+
+    /**
+     * Returns a page of vouchers whose voucherNumber equals the given value (GET /vouchers?voucherNumber=…).
+     *
+     * @return array<string, mixed>
+     * @throws LexwareException
+     */
+    public function findByNumber(string $voucherNumber): array;
 }

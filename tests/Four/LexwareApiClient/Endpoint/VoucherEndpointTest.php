@@ -98,6 +98,20 @@ class VoucherEndpointTest extends TestCase
         self::assertSame('/v1/vouchers/v1', $request->getUri()->getPath());
     }
 
+    public function testFindByNumberSendsEncodedFilter(): void
+    {
+        $this->addJsonResponse(200, '{"content":[{"id":"v1","voucherNumber":"RE 2026/1"}],"totalElements":1}');
+
+        $result = $this->endpoint->findByNumber('RE 2026/1');
+
+        self::assertSame(1, $result['totalElements']);
+
+        $request = $this->lastRequest();
+        self::assertSame('GET', $request->getMethod());
+        self::assertSame('/v1/vouchers', $request->getUri()->getPath());
+        self::assertSame('voucherNumber=RE+2026%2F1', $request->getUri()->getQuery());
+    }
+
     private function voucher(): Voucher
     {
         return new Voucher(
